@@ -33,7 +33,7 @@
         </div>
       </div>
       <div class="part-box">
-        <div class="ava-text">{{ $t('text223') }}
+        <div class="ava-text">{{ $t('text223') }}:
           <div style="margin: 0 5px;">0.00000000</div>{{ list[listIndex].label }}
         </div>
         <div class="yellow-btn">{{ $t('text212') }}</div>

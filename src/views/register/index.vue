@@ -20,50 +20,95 @@
         {{ $t('text71') }}
       </div>
       <div class="box">
-        <van-field class="input"  v-model="value1" label :placeholder="$t('text72')" />
-        <van-field class="input"  v-model="value1" label :placeholder="$t('text73')" >
+        <van-field class="input"  v-model="account" label :placeholder="$t('text72')" />
+        <van-field class="input" type="password" v-model="password" label :placeholder="$t('text73')" >
             <template #button>
                 <img src="@/assets/images/reg/password.png" style="width: 15px;height:15px" alt="">
             </template>
         </van-field>
-        <van-field class="input"  v-model="value1" label :placeholder="$t('text74')"  >
+        <van-field class="input" type="password" v-model="passwordAgain" label :placeholder="$t('text74')"  >
             <template #button>
                 <img src="@/assets/images/reg/password.png" style="width: 15px;height:15px" alt="">
             </template>
         </van-field>
-        <van-field class="input"  v-model="value1" label :placeholder="$t('text75')" >
+        <van-field class="input"  v-model="code" label :placeholder="$t('text75')" >
             <template #button>
-                <div class="button">{{ $t('text81') }}</div>
+                <div class="button" @click="getEmailCode">{{ isSend ? `${time}s` : $t('text81') }}</div>
             </template>
         </van-field>
-        <van-field class="input"  v-model="value1" label :placeholder="$t('text76')" />
-        <van-field class="input"  v-model="value1" label :placeholder="$t('text77')" />
+        <!-- <van-field class="input"  v-model="value1" label :placeholder="$t('text76')" />
+        <van-field class="input"  v-model="value1" label :placeholder="$t('text77')" /> -->
         <div style="margin-top: 20px;">
             <van-checkbox v-model="checked" shape="square">
                 <span style="color: var(--color);">{{ $t('text79') }}</span>
                 <span style="color:#1881D2">《{{ $t('text80') }}》</span>
             </van-checkbox>
         </div>
-        <div class="button2" style="margin-top: 45px;color">{{ $t('text69') }}</div>
+        <div class="button2" style="margin-top: 45px;color" @click="submit">{{ $t('text69') }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
+import { getCode, register } from "@/api/login.js";
 export default {
     data() {
         return {
-            checked: false
+            checked: false,
+            account: '',
+            password: '',
+            passwordAgain: '',
+            code: '',
+            isSend: false,
+            time: 60
         }
     },
   computed: {
     ...mapGetters(["getSwitchChecked"])
   },
   methods: {
+    ...mapActions(["setToken", "setUserInfo"]),
     goback() {
       this.$router.go(-1);
+    },
+    async getEmailCode() {
+      if (this.isSend) return
+      if (!this.account) return this.$toast(this.$t('text72'))
+      const res = getCode({
+        email: this.account,
+        type: 1
+      })
+      if (res.code === 200) {
+        this.isSend = true
+        let timer = setInterval(() => {
+          this.time--;
+          if (this.time === 0) {
+            clearInterval(timer);
+            this.isSend = false
+            this.time = 60
+          }
+        }, 1000)
+      }
+    },
+    async submit() {
+      if (!this.checked) return this.$toast(this.$t('text90'))
+      if (!this.account) return this.$toast(this.$t('text72'))
+      if (!this.password) return this.$toast(this.$t('text73'))
+      if (!this.passwordAgain) return this.$toast(this.$t('text74'))
+      if (!this.code) return this.$toast(this.$t('text75'))
+      if (this.password !== this.passwordAgain) return this.$toast(this.$t('text89'))
+      const res = await register({
+        account: this.account,
+        password: this.password,
+        code: this.code,
+      })
+      if (res.code == 200) {
+        this.setToken(res.data.token || '')
+        this.setUserInfo(res.data.walletVo || {})
+        this.$router.push('/home')
+      }
     }
   }
 };

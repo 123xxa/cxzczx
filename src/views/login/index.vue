@@ -6,8 +6,8 @@
     </div>
     <div class="box">
       <div style="padding:20px 0 ">
-        <van-field class="input" v-model="value1" label :placeholder="$t('text72')" />
-        <van-field class="input" v-model="value1" label :placeholder="$t('text73')">
+        <van-field class="input" v-model="account" label :placeholder="$t('text72')" />
+        <van-field class="input" type="password" v-model="password" label :placeholder="$t('text73')">
           <template #button>
             <img src="@/assets/images/reg/password.png" style="width: 15px;height:15px" alt />
           </template>
@@ -19,7 +19,7 @@
             </van-checkbox>
             <span style="color:#1881D2" @click="$router.push('/forgetPwd')">{{ $t('text82') }}</span>
         </div>
-        <div class="button2" >{{ $t('text83') }}</div>
+        <div class="button2" @click="submit">{{ $t('text83') }}</div>
       </div>
       <div style="text-align: center;">
         <span>{{ $t('text84') }}</span>
@@ -31,13 +31,34 @@
 
 <script>
 import setLang from "@/components/setLang";
+import { login } from "@/api/login.js";
+import { mapActions } from "vuex";
 export default {
   components: { setLang },
   data() {
     return {
-        checked: false
+        checked: false,
+        account: '',
+        password: ''
     }
   },
+  methods: {
+    ...mapActions(["setToken", "setUserInfo"]),
+    async submit() {
+      if (!this.checked) return this.$toast(this.$t('text90'))
+      if (!this.account) return this.$toast(this.$t('text72'))
+      if (!this.password) return this.$toast(this.$t('text73'))
+      const res = await login({
+        account: this.account,
+        password: this.password
+      })
+      if (res.code == 200) {
+        this.setToken(res.data.token || '')
+        this.setUserInfo(res.data.walletVo || {})
+        this.$router.push('/home')
+      }
+    }
+  }
 };
 </script>
 

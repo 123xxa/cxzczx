@@ -3,14 +3,14 @@
     <div class="box" style="position: sticky;top:0;padding-bottom:10px;margin-bottom:10px;z-index:1;">
       <div class="top-box ">
         <div class="top-box-l">
-          <div>{{ $t('text47') }}</div>
-          <div>{{ $t('text48') }}</div>
+          <div>{{ token ? (userInfo && userInfo.nickname ? userInfo.nickname : '--') : $t('text47') }}</div>
+          <div style="white-space: nowrap;">{{ token ? (userInfo && userInfo.id ? `UID：${userInfo.id}` : '--') : $t('text48') }}</div>
         </div>
-        <div class="top-box-m">
+        <!-- <div class="top-box-m">
           <div>--</div>
           <div>{{ $t('text49') }}:</div>
-        </div>
-        <div class="top-box-r" v-if="$store.state.token">{{ $t('text50') }}</div>
+        </div> -->
+        <div class="top-box-r" v-if="token" @click="submit()">{{ $t('text50') }}</div>
         <div class="top-box-r" v-else @click="$router.push('/login')">{{ $t('text83') }}</div>
         
       </div>
@@ -22,9 +22,9 @@
             <img v-show="!viewFlag" @click="viewFlag =!viewFlag" src="@/assets/images/mine/b.png" style="width: 20px;height: 20px;" alt="">
         </div>
         <div class="top-info-box2">{{$t('text52') }} (USDT)</div>
-        <div class="top-info-box3">{{ viewFlag? '0' :'******'}}</div>
+        <div class="top-info-box3">{{ viewFlag? (token && userInfo && userInfo.usdt || 0) :'******'}}</div>
         <div  class="top-info-box4">
-            <div class="top-info-box4-l">{{ viewFlag? $t('text53') +': 0' :'******'}}</div>
+            <div class="top-info-box4-l">{{ viewFlag? $t('text53') +`: ${token && userInfo && userInfo.usdt || 0}` :'******'}}</div>
             <van-icon name="arrow" color="#A5A8AC" size="19"/>
         </div>
       </div>
@@ -82,10 +82,12 @@
 </template>
 
 <script>
-import {mapGetters,mapActions} from "vuex"
+import {mapGetters,mapActions,mapMutations} from "vuex"
+import { logout } from "@/api/login.js";
+import { Dialog  } from 'vant';
 export default {
     computed:{
-        ...mapGetters(['getSwitchChecked'])
+        ...mapGetters(['getSwitchChecked', 'userInfo', 'token'])
     },
     data() {
         return {
@@ -98,9 +100,26 @@ export default {
     },
     methods: {
         ...mapActions(['setSwitchChecked']),
+        ...mapMutations(['removeUserInfo']),
         changeMode(e) {
             this.setSwitchChecked(e)
-        }
+        },
+        submit() {
+            Dialog.confirm({
+                title: this.$t('text92'),
+                message: this.$t('text93'),
+                confirmButtonText: this.$t('text94'),
+                cancelButtonText: this.$t('text95')
+            }).then(() => {
+                this.loginOut()
+            }).catch(() => {})
+        },
+        loginOut() {
+            logout().then(() => {
+                this.removeUserInfo()
+                this.$toast(this.$t('text91'))
+            })
+        },
     },
 };
 </script>

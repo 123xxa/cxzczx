@@ -11,6 +11,9 @@
   }
 </script>
 <style >
+.van-dialog__header {
+  color: #000000;
+}
 :root{
   --bg-color:#111827;
   --box-bg-color:#171E26;

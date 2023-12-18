@@ -9,7 +9,7 @@
       </template>
     </van-nav-bar>
     <div class="main-box">
-      <div class="list-item" v-for="item in list" :key="item.label">
+      <div class="list-item" v-for="item in list" :key="item.label" @click="$router.push('/withdrawal')">
         <div class="left-img">
           <img :src="item.logo" alt="" class="img">
         </div>

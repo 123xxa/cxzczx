@@ -77,6 +77,11 @@ const routes = [
     name:"transfer",
     component:()=>import(/* webpackChunkName: "home" */ '@/views/transfer/index.vue')
   },
+  {
+    path:"/withdrawal",
+    name:"withdrawal",
+    component:()=>import(/* webpackChunkName: "home" */ '@/views/withdrawal/index.vue')
+  }
 ]
 
 const router = new VueRouter({
