@@ -1,0 +1,345 @@
+<template>
+  <div class="content">
+    <div class="top">
+        <div class="top-t">
+          <div :class="['top-t-l top-t-item top-t-item-active']">{{ $t('text34') }}</div>
+        </div>
+        <div class="top-b">
+  
+          <img src="@/assets/images/lever/list.png" class="top-list-icon" @click="show =true" alt />
+          <span class="top-b-text1">BTC / USDT</span>
+          <span class="top-b-text2">-1.20%</span>
+          <!-- <div>
+                    <img src="@/assets/images/lever/datamap.png" alt="" style="width:20px;height:20px;">
+                    <img src="@/assets/images/lever/record1.png" alt="" style="height:15px;width: 15px;">
+          </div>-->
+        </div>
+      </div>
+    <div class="m">
+      <div class="m-l">40960.16</div>
+      <div class="m-r">
+        <div>
+          <div>{{ $t('text35') }}</div>
+          <div>{{ $t('text36') }}</div>
+          <div>{{ $t('text37') }}</div>
+        </div>
+        <div>
+          <div>42202.55</div>
+          <div>42202.55</div>
+          <div>42202.55</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="time-list">
+      <div
+        :class="['time-list-item', timeType == i.value ? 'time-list-item-active' : '']"
+        v-for="(i, k) in timeList"
+        @click="timeType = i.value"
+        :key="k"
+      >{{ i.title }}</div>
+    </div>
+    <trading-vue
+      :data="chartData"
+      :width="width"
+      :height="316"
+      titleTxt
+      :colorBack="getSwitchChecked?'#171E26':'#FFFFFF'"
+      :colorText="getSwitchChecked?'#FFFFFF':'#000000'"
+      :toolbar="false"
+      class="trading-vue"
+      :chart-config="{TB_ICON_BRI: 1}"
+    ></trading-vue>
+
+    <div class="list">
+      <div class="list-item" v-for="(i,k) in prodList" :key="k">
+         <div>{{ i }} {{ $t('text38') }}</div>
+         <div class="list-item-text">{{ $t('text39') }}50%</div>
+         <img src="@/assets/images/lever/icon.png" class="list-icon" alt="">
+      </div>
+    </div>
+    <div class="text">{{ $t('text40') }}</div>
+    <div class="list" style="margin-top: 15px;">
+      <div class="list-item" >
+         <div>USDT</div>
+         <img src="@/assets/images/lever/icon.png" class="list-icon" alt="">
+      </div>
+    </div>
+    <div class="text">{{ $t('text41') }}</div>
+    <div class="input-content">
+      <van-field
+      class="input"
+    v-model="value1"
+    label=""
+    right-icon="arrow"
+    placeholder=""
+  />
+    </div>
+    <div class="text">
+      <div class="text-item">
+        <img src="@/assets/images/lever/moy.png" style="width: 20px; height: 20px;" alt="">
+        <span>{{ $t('text42') }}</span>
+      </div>
+      <div>0USDT</div>
+    </div>
+    <div class="btn-group">
+      <div class="btn">{{ $t('text43') }}</div>
+      <div class="btn btn2">{{ $t('text44') }}</div>
+    </div>
+    <div class="record-tab">
+      <div class="record-tab record-tab-active">{{ $t('text45') }}</div>
+      <div class="record-tab">{{ $t('text46') }}</div>
+    </div>
+    <empty/>
+    <list :show.sync="show" />
+  </div>
+</template>
+
+<script>
+import { Data2 } from "./test.js";
+import TradingVue from "trading-vue-js";
+import list from "./list.vue";
+import {mapGetters} from "vuex"
+export default {
+  components: { TradingVue ,list},
+  computed:{
+    ...mapGetters(['getSwitchChecked'])
+  },
+  data() {
+    return {
+      prodList:[30,60,120,180,300,450,600],
+      show:false,
+      width: 0,
+      chartData: Data2,
+      value1:"",
+      timeType: 1,
+      timeList: [
+        {
+          title: "Time",
+          value: 1
+        },
+        {
+          title: "1min",
+          value: 2
+        },
+        {
+          title: "5min",
+          value: 3
+        },
+        {
+          title: "30min",
+          value: 4
+        },
+        {
+          title: "1hour",
+          value: 5
+        },
+        {
+          title: "1day",
+          value: 6
+        },
+        {
+          title: "1week",
+          value: 7
+        },
+        {
+          title: "1mon",
+          value: 8
+        }
+      ]
+    };
+  },
+  created() {
+    this.width = document.documentElement.clientWidth;
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.content {
+  background: var(--box-bg-color);
+  min-height: calc(100vh - 50px);
+}
+.top {
+  background: var(--box-bg-color);
+  padding: 20px;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgba(17, 24, 39, 1);
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  .top-t {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    .top-t-item {
+      background: #262e39;
+      height: 30px;
+      padding: 0 10px;
+      line-height: 30px;
+      color: #fff;
+    }
+    .top-t-item-active {
+      background: #ffce1c;
+      color: #000000;
+    }
+    .top-t-l {
+      border-radius: 20px;
+    }
+  }
+  .top-b {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    .top-list-icon{
+      background: var(--box-bg-color);
+      width: 20px; 
+      height: 20px;
+      position: relative;
+    }
+    .top-b-text1 {
+      font-size: 14px;
+      margin: 0 10px;
+      color: var(--color);
+    }
+    .top-b-text2 {
+      color: #f6465d;
+      font-size: 12px;
+    }
+  }
+}
+.m {
+  padding: 10px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .m-l {
+    color: rgba(246, 70, 93, 1);
+    font-size: 20px;
+    padding-left: 15px;
+  }
+  .m-r {
+    min-width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--color);
+  }
+}
+.time-list {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  .time-list-item {
+    padding: 10px 0;
+  color: var(--color);
+  }
+  .time-list-item-active {
+    border-bottom: 1px solid var(--color);
+  }
+}
+
+.list{
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  // justify-content: space-around;
+  align-items: center;
+  padding: 0 15px;
+  box-sizing: border-box;
+ .list-item{
+    width: 80px;
+    background: #EEEEEE;
+    border-radius: 10px;
+    padding: 8px 10px;
+    margin: 0 10px 10px 0 ;
+    text-align: center;
+    color: #4B5563;
+    position: relative;
+    .list-item-text{
+      color: #E27046;
+    }
+    .list-icon{
+      width: 25px;
+      height: 20px;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      border-radius: 0 0 10px 0;
+    }
+ }
+}
+
+.text{
+  margin-top: 15px;
+  padding: 0 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .text-item{
+    display: flex;
+  align-items: center;
+  }
+}
+.trading-vue{
+  background: var(--box-bg-color);
+}
+.input-content{
+  padding: 0 15px;
+  box-sizing: border-box;
+  margin-top: 10px;
+}
+.input{
+  border: 1px solid rgba(75,85,99,1);
+  background: #00000000;
+  border-radius: 10px;
+}
+::v-deep .van-field__control{
+  color:  var(--color);
+}
+.btn-group{
+  padding: 0 15px 10px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  border-bottom: 1px solid rgba(75,85,99,1);
+  color:  #fff;
+ .btn{
+    width: 48%;
+    border-radius:5px;
+    background: #51BC86;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 16px;
+}
+.btn2{
+  background: #F6465D;
+}
+}
+.record-tab{
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  color: var(--color);
+  .record-tab{
+    position: relative;
+  }
+  .record-tab-active::after{
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background:  var(--color);
+  }
+}
+</style>

@@ -1,0 +1,7 @@
+@font-face{
+    font-family: 'bPlex-Regular';
+    src : url('./bPlex-Regular.woff');
+}
+*{
+    font-family: 'bPlex-Regular';
+}
