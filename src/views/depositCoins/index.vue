@@ -5,7 +5,7 @@
         <div class="title">{{ $t('text200') }}</div>
       </template>
       <template #left>
-        <van-icon @click="goback" name="arrow-left" color="#fff" size="20" />
+        <van-icon @click="goback" name="arrow-left" color="var(--color)" size="20" />
       </template>
     </van-nav-bar>
     <div class="main-box">
@@ -114,9 +114,9 @@ export default {
   background: var(--bg-color);
 }
 .content {
-  color: #fff;
+  color: var(--color);
   .title {
-    color: #fff;
+    color: var(--color);
     font-weight: 700;
   }
   .main-box {
@@ -185,7 +185,7 @@ export default {
       .upload-box {
         width: 88px;
         height: 88px;
-        border: 1px solid #FFFFFF;
+        border: 1px solid var(--color);
         box-sizing: border-box;
         display: flex;
         justify-content: center;
@@ -196,7 +196,7 @@ export default {
           content: "";
           width: 56px;
           height: 3px;
-          background: #FFFFFF;
+          background: var(--color);
           position: absolute;
           border-radius: 3px;
         }
@@ -204,7 +204,7 @@ export default {
           content: "";
           width: 3px;
           height: 56px;
-          background: #FFFFFF;
+          background: var(--color);
           position: absolute;
           border-radius: 3px;
         }

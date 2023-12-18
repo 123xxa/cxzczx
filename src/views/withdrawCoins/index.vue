@@ -5,7 +5,7 @@
         <div class="title">{{ $t('text211') }}</div>
       </template>
       <template #left>
-        <van-icon @click="goback" name="arrow-left" color="#fff" size="20" />
+        <van-icon @click="goback" name="arrow-left" color="var(--color)" size="20" />
       </template>
     </van-nav-bar>
     <div class="main-box">
@@ -117,10 +117,10 @@ export default {
 }
 
 .content {
-  color: #fff;
+  color: var(--color);
 
   .title {
-    color: #fff;
+    color: var(--color);
     font-weight: 700;
   }
 
@@ -134,7 +134,7 @@ export default {
       display: flex;
       align-items: center;
       background: var(--bg-color);
-      border-bottom: 2px solid var(--box-bg-color);
+      border-bottom: 1px solid var(--box-bg-color);
       .left-img {
         width: 33px;
         height: 33px;
