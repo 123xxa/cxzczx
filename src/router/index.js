@@ -66,7 +66,17 @@ const routes = [
     path:"/depositCoins",
     name:"depositCoins",
     component:()=>import(/* webpackChunkName: "home" */ '@/views/depositCoins/index.vue')
-  }
+  },
+  {
+    path:"/withdrawCoins",
+    name:"withdrawCoins",
+    component:()=>import(/* webpackChunkName: "home" */ '@/views/withdrawCoins/index.vue')
+  },
+  {
+    path:"/transfer",
+    name:"transfer",
+    component:()=>import(/* webpackChunkName: "home" */ '@/views/transfer/index.vue')
+  },
 ]
 
 const router = new VueRouter({

@@ -34,11 +34,11 @@
             <div class="item-left">{{ $t('text56') }}</div>
             <van-icon name="arrow" color="#A5A8AC" size="19"/>
         </div>
-        <div class="item">
+        <div class="item" @click="$router.push('/withdrawCoins')">
             <div class="item-left">{{ $t('text57') }}</div>
             <van-icon name="arrow" color="#A5A8AC" size="19"/>
         </div>
-        <div class="item">
+        <div class="item" @click="$router.push('/transfer')">
             <div class="item-left">{{ $t('text58') }}</div>
             <van-icon name="arrow" color="#A5A8AC" size="19"/>
         </div>

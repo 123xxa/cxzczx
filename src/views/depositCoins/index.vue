@@ -111,7 +111,7 @@ export default {
 
 <style lang="scss" scoped>
 ::v-deep .van-nav-bar {
-  background: rgba(0, 0, 0, 0);
+  background: var(--bg-color);
 }
 .content {
   color: #fff;
