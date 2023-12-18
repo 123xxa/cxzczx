@@ -61,6 +61,11 @@ const routes = [
     path:"/forgetPwdNext",
     name:"forgetPwdNext",
     component:()=>import(/* webpackChunkName: "home" */ '@/views/forgetPwd/forgetPwdNext.vue')
+  },
+  {
+    path:"/depositCoins",
+    name:"depositCoins",
+    component:()=>import(/* webpackChunkName: "home" */ '@/views/depositCoins/index.vue')
   }
 ]
 

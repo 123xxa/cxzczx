@@ -11,7 +11,7 @@
     <div class="bg">
       <div class="box top">
         <div class="top-title">{{ $t('text67') }}</div>
-        <div class="top-item" v-for="(i,k) in rechargeList" :key="k">
+        <div class="top-item" v-for="(i,k) in rechargeList" :key="k" @click="$router.push('/depositCoins')">
           <div class="top-item-l">
             <img :src="i.icon" alt style="width: 20px;height: 20px;" />
             <div>{{ i.title }}</div>
