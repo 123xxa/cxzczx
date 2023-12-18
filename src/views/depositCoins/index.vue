@@ -9,8 +9,8 @@
       </template>
     </van-nav-bar>
     <div class="main-box">
-      <div class="code-img" id="qrcode">
-        <!-- <img src="@/assets/images/home/banner1.jpg" alt="" class="img"> -->
+      <div class="code-img">
+          <div class="img" id="qrcode"></div>
       </div>
       <div class="text201">{{ $t('text201') }}</div>
       <div class="my-address">TMMcdrDYqyjsj8Ft7zJYd71696UT7tnZxW</div>
@@ -48,8 +48,8 @@ export default {
       if (div) {
         var qrcode = new QRCode(div, {
             text: "http://www.baidu.com",
-            width: 128,
-            height: 128,
+            width: 118,
+            height: 118,
             colorDark : "#000",
             colorLight : "#fff",
             correctLevel : QRCode.CorrectLevel.H
@@ -134,7 +134,8 @@ export default {
       .img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        border: 1px solid #FFFFFF;
+        box-sizing: border-box;
       }
     }
     .text201 {
