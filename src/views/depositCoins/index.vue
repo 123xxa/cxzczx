@@ -59,7 +59,6 @@ export default {
     async init() {
       const res = await getRechargeAddress()
       if (res.code == 200) {
-        console.log(res)
         this.address = res.data
         this.$nextTick(() => {
           let div = document.getElementById("qrcode")
