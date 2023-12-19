@@ -76,7 +76,7 @@ export default {
     async getEmailCode() {
       if (this.isSend) return
       if (!this.account) return this.$toast(this.$t('text72'))
-      const res = getCode({
+      const res = await getCode({
         email: this.account,
         type: 1
       })

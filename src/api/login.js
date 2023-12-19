@@ -52,3 +52,15 @@ export function getCode(data) {
     timeout: 20000
   })
 }
+
+// 重置密码
+export function resetAccount(data) {
+  return request({
+    url: '/app/reset',
+    headers: {
+      isToken: false
+    },
+    method: 'post',
+    data: data
+  })
+}

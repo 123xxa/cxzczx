@@ -14,40 +14,77 @@
       </template>
     </van-nav-bar>
     <div class="box">
-        <van-field class="input"  v-model="value1" label :placeholder="$t('text73')" >
+        <van-field class="input"  v-model="password" label :placeholder="$t('text73')" >
             <template #button>
                 <img src="@/assets/images/reg/password.png" style="width: 15px;height:15px" alt="">
             </template>
         </van-field>
-        <van-field class="input"  v-model="value1" label :placeholder="$t('text74')"  >
+        <van-field class="input"  v-model="passwordAgain" label :placeholder="$t('text74')"  >
             <template #button>
                 <img src="@/assets/images/reg/password.png" style="width: 15px;height:15px" alt="">
             </template>
         </van-field>
-        <van-field class="input"  v-model="value1" label :placeholder="$t('text75')" >
+        <van-field class="input"  v-model="code" label :placeholder="$t('text75')" >
             <template #button>
-                <div class="button">{{ $t('text81') }}</div>
+              <div class="button" @click="getEmailCode">{{ isSend ? `${time}s` : $t('text81') }}</div>
             </template>
         </van-field>
-        <div class="button2" @click="to">{{ $t('text88') }}</div>
+        <div class="button2" @click="submit">{{ $t('text88') }}</div>
     </div>
     </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
+import { getCode, resetAccount } from "@/api/login.js";
     export default {
         data() {
             return {
-                value1: ''
+              account: '',
+              code: '',
+              password: '',
+              passwordAgain: '',
+              isSend: false,
+              time: 60
             }
         },
         computed: {
     ...mapGetters(["getSwitchChecked"])
   },
   methods:{
-    to(){
-        this.$router.push({path:'/forgetPwdNext'})
+    ...mapActions(["setToken", "setUserInfo"]),
+    async getEmailCode() {
+      this.account = this.$route.query.e
+      if (this.isSend) return
+      if (!this.account) return this.$toast(this.$t('text72'))
+      const res = await getCode({
+        email: this.account,
+        type: 1
+      })
+      if (res.code === 200) {
+        this.isSend = true
+        let timer = setInterval(() => {
+          this.time--;
+          if (this.time === 0) {
+            clearInterval(timer);
+            this.isSend = false
+            this.time = 60
+          }
+        }, 1000)
+      }
+    },
+    async submit(){
+        if (!this.password) return this.$toast(this.$t('text73'))
+        if (!this.passwordAgain) return this.$toast(this.$t('text74'))
+        if (!this.code) return this.$toast(this.$t('text75'))
+        const res = await resetAccount({
+            account: this.account,
+            password: this.password,
+            code: this.code,
+        })
+        if (res.code == 200) {
+            this.$router.push('/login')
+        }
     }
   }
     }

@@ -17,7 +17,7 @@
         <div class="tabs">
             <div class="tabs-item">{{ $t('text87') }}</div>
         </div>
-        <van-field class="input"  v-model="value1" label :placeholder="$t('text72')" />
+        <van-field class="input"  v-model="account" label :placeholder="$t('text72')" />
         <div class="button2" @click="to">{{ $t('text86') }}</div>
     </div>
     </div>
@@ -28,7 +28,7 @@ import { mapGetters } from "vuex";
     export default {
         data() {
             return {
-                value1: ''
+                account: ''
             }
         },
         computed: {
@@ -36,7 +36,13 @@ import { mapGetters } from "vuex";
   },
   methods:{
     to(){
-        this.$router.push({path:'/forgetPwdNext'})
+        if (!this.account) return this.$toast(this.$t('text72'))
+        this.$router.push({
+          path:'/forgetPwdNext',
+          query: {
+            e: this.account
+          } 
+        })
     }
   }
     }
