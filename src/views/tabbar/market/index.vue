@@ -6,42 +6,115 @@
         <div class="tab-item">USDT</div>
       </div>
       <div class="table-th">
-        <div style="flex: 1.5 1 0%">
+        <div style="flex: 1.5 1 0%" @click="toSort(1)">
           {{ $t('text11') }}
-          <img src="@/assets/images/updown0.png" class="updown" alt="" />
+          <img :src="getSortPic(1)" class="updown" alt="" />
         </div>
-        <div style="flex: 1">
+        <div style="flex: 1" @click="toSort(2)">
           {{ $t('text12') }}
-          <img src="@/assets/images/updown0.png" class="updown" alt="" />
+          <img :src="getSortPic(2)" class="updown" alt="" />
         </div>
-        <div style="flex: 1; text-align: right">
+        <div style="flex: 1; text-align: right" @click="toSort(3)">
           {{ $t('text13') }}
-          <img src="@/assets/images/updown0.png" class="updown" alt="" />
+          <img :src="getSortPic(3)" class="updown" alt="" />
         </div>
       </div>
       </div>
     </van-sticky>
-    <div class="table-item" v-for="(i, k) in 20" :key="k">
+    <div class="table-item" v-for="(i, k) in list" :key="i.symbol">
       <div class="table-name">
         <div class="table-name-text">
-          <span class="table-name-text1"> BTC<span class="table-name-text2">/USDT</span> </span>
+          <span class="table-name-text1"> {{i.symbol}}<span class="table-name-text2">/USDT</span> </span>
         </div>
         <div>
-          <span class="table-name-text2">{{ $t('text14') }}1006281.9504</span>
+          <span class="table-name-text2">{{ $t('text14') }}{{ getPercent(i.volumeChange24h) }}</span>
         </div>
       </div>
-      <div class="table-price">41835.14</div>
+      <div class="table-price">{{ Number(Number(i.price).toFixed(8)) }}</div>
       <div class="table-rise">
-        <div :class="['table-button-up', k % 2 == 0 ? 'table-button-down' : '']">+0.12%</div>
+        <div :class="{'table-button-up': true, 'table-button-down': Number(i.percentChange24h) >= 0}">{{Number(i.percentChange24h) >= 0 ? '+' : ''}}{{getPercent(i.percentChange24h)}}%</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-    export default {
+  import { getLastPrice } from "@/api/home.js";
+  export default {
+    data() {
+      return {
+        list: [],
+        sortType: '',
+        sortIndex: null,
+      }
+    },
+    created() {
+      this.getList()
+    },
+    methods: {
+      getSortPic(index) {
+        if (this.sortIndex == index) {
+          return this.sortType == 'up' ? require('@/assets/images/updown1.png') : require('@/assets/images/updown2.png')
+        }
+        return require('@/assets/images/updown0.png')
+      },
+      getPercent(e) {
+        if (!(e && String(e).length > 0)) return '0'
+        let n = String(e)
+        let list = n.split('')
+        let index = list.findIndex(o => o === '.')
+        if (index !== -1) {
+          let b = list.slice(0, index)
+          let a = list.slice(index + 1, list.length)
+          if (a.length > 2) {
+            if (Number(a[0]) === 0 && Number(a[1]) === 0) {
+              let nIn = a.findIndex(o => Number(o) !== 0)
+              if (nIn !== -1) {
+                let last = nIn + 2
+                return `${b.join('')}.${a.slice(0, last > a.length ? a.length : last).join('')}`
+              }
+            } else {
+              return `${b.join('')}.${a.slice(0, 2).join('')}`
+            }
+          }
+        }
+        return `${n}`
+      },
+      async getList() {
+        const res = await getLastPrice()
+        if (res.code == 200) {
+          this.list = res.data || []
+        }
+      },
+      toSort(index) {
+        if (index !== this.sortIndex) {
+          this.sortIndex = index
+          this.sortType = 'up'
+        } else {
+          this.sortType = this.sortType === 'up' ? 'down' : 'up'
+        }
         
+        if (this.sortIndex == 1) {
+          this.list = this.multiSort(this.list, (a, b) => this.sortType === 'up' ? (a.symbol).localeCompare(b.symbol) : (b.symbol).localeCompare(a.symbol))
+        } else if (this.sortIndex == 2) {
+          this.list = this.multiSort(this.list, (a, b) =>  this.sortType === 'up' ? (a.price - b.price) : (b.price - a.price))
+        } else {
+          this.list = this.multiSort(this.list, (a, b) =>  this.sortType === 'up' ? (a.percentChange24h - b.percentChange24h) : (b.percentChange24h - a.percentChange24h))
+        }
+      },
+      multiSort(array, ...compairers) {
+          let arr = JSON.parse(JSON.stringify(array))
+          return arr.sort((a, b) => {
+              for (const c of compairers) {
+                  const r = c(a, b)
+                  if (r !== 0) {
+                      return r
+                  }
+              }
+          })
+      },
     }
+  }
 </script>
 
 <style lang="scss" scoped>

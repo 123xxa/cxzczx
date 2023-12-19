@@ -3,6 +3,8 @@ import store from '@/store'
 import errorCode from '@/utils/errorCode'
 import config from './config.js'
 import { Toast, Dialog  } from 'vant';
+import router from '@/router'
+import i18n from '@/i18n/index'
 
 function getToken() {
   return localStorage.getItem(config.tokenKey)
@@ -41,7 +43,7 @@ const service = axios.create({
   // axios中请求配置有baseURL选项，表示请求URL公共部分
   baseURL: config.baseUrl,
   // 超时
-  timeout: 10000
+  timeout: 60000
 })
 
 // request拦截器
@@ -100,20 +102,20 @@ service.interceptors.response.use(res => {
     if (code === 401) {
       if (!isRelogin.show) {
         isRelogin.show = true;
-        // Dialog.confirm({
-        //   title: '系统提示',
-        //   message: '登录状态已过期，您可以继续留在该页面，或者重新登录',
-        //   confirmButtonText: '重新登录'
-        // }).then(() => {
-        //   isRelogin.show = false;
-        //   store.dispatch('LogOut').then(() => {
-        //     location.href = process.env.VUE_APP_CONTEXT_PATH + "index";
-        //   })
-        // }).catch(() => {
-        //   isRelogin.show = false;
-        // });
+        Dialog.confirm({
+          title: i18n.t('text96'),
+          message: i18n.t('text97'),
+          confirmButtonText: i18n.t('text94'),
+          cancelButtonText: i18n.t('text95')
+        }).then(() => {
+          isRelogin.show = false;
+          store.commit('removeUserInfo')
+          router.push('/home')
+        }).catch(() => {
+          isRelogin.show = false;
+        });
       }
-      return Promise.reject('无效的会话，或者会话已过期，请重新登录。')
+      return Promise.reject('error')
     } else if (code === 500) {
       Toast(msg)
       return Promise.reject(new Error(msg))
@@ -131,11 +133,11 @@ service.interceptors.response.use(res => {
     console.log('err' + error)
     let { message } = error;
     if (message == "Network Error") {
-      message = "后端接口连接异常";
+      message = i18n.t('text98');
     } else if (message.includes("timeout")) {
-      message = "系统接口请求超时";
+      message = i18n.t('text99');
     } else if (message.includes("Request failed with status code")) {
-      message = "系统接口" + message.substr(message.length - 3) + "异常";
+      message = i18n.t('text101') + message.substr(message.length - 3) + i18n.t('text100');
     }
     Toast(message)
     return Promise.reject(error)

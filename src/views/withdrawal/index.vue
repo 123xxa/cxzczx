@@ -87,82 +87,13 @@ export default {
       ],
       typeIndex: 0,
       listIndex: 0,
-      list: [
-        {
-          logo: require('@/assets/images/withdrawCoins/1.png'),
-          label: 'USDT'
-        },
-        {
-          logo: require('@/assets/images/withdrawCoins/2.png'),
-          label: 'BTC'
-        },
-        {
-          logo: require('@/assets/images/withdrawCoins/3.png'),
-          label: 'ETH'
-        },
-        {
-          logo: require('@/assets/images/withdrawCoins/4.png'),
-          label: 'LTC'
-        },
-        {
-          logo: require('@/assets/images/withdrawCoins/5.png'),
-          label: 'BCH'
-        },
-        {
-          logo: require('@/assets/images/withdrawCoins/6.png'),
-          label: 'USDC'
-        },
-        {
-          logo: require('@/assets/images/withdrawCoins/7.jpg'),
-          label: 'XCC'
-        },
-        {
-          logo: require('@/assets/images/withdrawCoins/8.jpg'),
-          label: 'MDA'
-        },
-        {
-          logo: require('@/assets/images/withdrawCoins/9.jpg'),
-          label: 'DOTS'
-        },
-        {
-          logo: require('@/assets/images/withdrawCoins/10.jpg'),
-          label: 'FDE'
-        },
-        {
-          logo: require('@/assets/images/withdrawCoins/11.jpg'),
-          label: 'ESMY'
-        },
-        {
-          logo: require('@/assets/images/withdrawCoins/12.jpg'),
-          label: 'VTSD'
-        },
-        {
-          logo: require('@/assets/images/withdrawCoins/13.jpg'),
-          label: 'TWB'
-        },
-        {
-          logo: require('@/assets/images/withdrawCoins/14.jpg'),
-          label: 'WHD'
-        },
-        {
-          logo: require('@/assets/images/withdrawCoins/15.jpg'),
-          label: 'QCM'
-        },
-        {
-          logo: require('@/assets/images/withdrawCoins/16.jpg'),
-          label: 'ALIDD'
-        },
-        {
-          logo: require('@/assets/images/withdrawCoins/17.jpg'),
-          label: 'MTC'
-        },
-        {
-          logo: require('@/assets/images/withdrawCoins/18.jpg'),
-          label: 'AITO'
-        }
-      ],
       recordList: []
     };
+  },
+  computed: {
+    list() {
+      return this.$store.state.coinList
+    }
   },
   methods: {
     to(e) {

@@ -11,7 +11,7 @@
     <div class="bg">
       <div class="box top">
         <div class="top-title">{{ $t('text67') }}</div>
-        <div class="top-item" v-for="(i,k) in rechargeList" :key="k" @click="$router.push('/depositCoins')">
+        <div class="top-item" v-for="(i,k) in rechargeList" :key="k" @click="$router.push({ path: '/depositCoins', query: {chainType: i.chainType} })">
           <div class="top-item-l">
             <img :src="i.icon" alt style="width: 20px;height: 20px;" />
             <div>{{ i.title }}</div>
@@ -63,24 +63,26 @@ export default {
       rechargeList: [
         {
           icon: require("@/assets/images/recharge/1.png"),
-          title: "USDT-TRC20"
+          title: "USDT-TRC20",
+          chainType: 1
         },
-        {
-          icon: require("@/assets/images/recharge/2.png"),
-          title: "USDT-TRC20"
-        },
+        // {
+        //   icon: require("@/assets/images/recharge/2.png"),
+        //   title: "USDT-TRC20"
+        // },
         {
           icon: require("@/assets/images/recharge/3.png"),
-          title: "USDT-ERC20"
+          title: "USDT-ERC20",
+          chainType: 2
         },
-        {
-          icon: require("@/assets/images/recharge/4.png"),
-          title: "ETH-ERC20"
-        },
-        {
-          icon: require("@/assets/images/recharge/5.png"),
-          title: "USDC-ERC20"
-        }
+        // {
+        //   icon: require("@/assets/images/recharge/4.png"),
+        //   title: "ETH-ERC20"
+        // },
+        // {
+        //   icon: require("@/assets/images/recharge/5.png"),
+        //   title: "USDC-ERC20"
+        // }
       ]
     };
   },

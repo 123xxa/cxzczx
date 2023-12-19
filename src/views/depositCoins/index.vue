@@ -13,50 +13,70 @@
           <div class="img" id="qrcode"></div>
       </div>
       <div class="text201">{{ $t('text201') }}</div>
-      <div class="my-address">TMMcdrDYqyjsj8Ft7zJYd71696UT7tnZxW</div>
-      <div class="yellow-btn" @click="copy('TMMcdrDYqyjsj8Ft7zJYd71696UT7tnZxW')">{{ $t('text202') }}</div>
+      <div class="my-address">{{ address }}</div>
+      <div class="yellow-btn" @click="copy(address)">{{ $t('text202') }}</div>
       <div class="input-content">
         <div class="input-label">{{ $t('text203') }}</div>
-        <van-field class="input" v-model="value1" :placeholder="$t('text204')" />
+        <van-field class="input" v-model="account" :placeholder="$t('text204')" />
         <div class="input-label">{{ $t('text205') }}</div>
-        <van-field class="input" v-model="value1" :placeholder="$t('text206')" />
+        <van-field class="input" v-model="amount" type="number" :placeholder="$t('text206')" />
         <div class="input-label" style="margin: 20px 0;">{{ $t('text207') }}</div>
         <van-uploader :after-read="afterRead">
           <div class="upload-box"></div>
         </van-uploader>
         <div class="input-label" style="margin: 0;">{{ $t('text208') }}</div>
       </div>
-      <div class="yellow-btn">{{ $t('text209') }}</div>
+      <div class="yellow-btn" @click="submit">{{ $t('text209') }}</div>
     </div>
   </div>
 </template>
 
 <script>
 import QRCode from 'qrcode2'
+import { appRecharge, getRechargeAddress, imageUploader } from '@/api/user.js'
 export default {
   data() {
     return {
-      value1: ''
+      // 1 TRC20 2 ERC20
+      chainType: 1,
+      address: '',
+      account: '',
+      amount: '',
+      value1: '',
+      imgPath: ''
     };
+  },
+  created() {
+    if (this.$route.query.chainType) {
+      this.chainType = this.$route.query.chainType
+    }
   },
   mounted() {
     this.init()
   },
   methods: {
-    init() {
-      let div = document.getElementById("qrcode")
-      if (div) {
-        var qrcode = new QRCode(div, {
-            text: "http://www.baidu.com",
-            width: 118,
-            height: 118,
-            colorDark : "#000",
-            colorLight : "#fff",
-            correctLevel : QRCode.CorrectLevel.H
-        });
+    async init() {
+      const res = await getRechargeAddress()
+      if (res.code == 200) {
+        console.log(res)
+        this.address = res.data
+        this.$nextTick(() => {
+          let div = document.getElementById("qrcode")
+            if (div) {
+              var qrcode = new QRCode(div, {
+                  text: this.address,
+                  width: 118,
+                  height: 118,
+                  colorDark : "#000",
+                  colorLight : "#fff",
+                  correctLevel : QRCode.CorrectLevel.H
+              });
+            }
+        })
       }
     },
     copy(text) {
+      if (!(text && text.length > 0)) return
       let that = this
       if (navigator.clipboard) {
         navigator.clipboard.writeText(text).then(
@@ -101,10 +121,33 @@ export default {
     goback(){
         this.$router.go(-1)
     },
-    afterRead(file) {
-      // 此时可以自行将文件上传至服务器
-      console.log(file);
+    async afterRead(file) {
+      // // 此时可以自行将文件上传至服务器
+      // console.log(file);
+      let content = file.file;
+      //创建一个新的FormData
+      let formData = new FormData();
+      // upload这个名字是后台给的
+      formData.append("file", content);
+      //获取formdata表单所有的数据
+      const res = await imageUploader(formData)
+      this.imgPath = res
     },
+    async submit() {
+      if (!this.account) return this.$toast(this.$t('text204'))
+      if (!this.amount) return this.$toast(this.$t('text206'))
+      if (!this.imgPath) return this.$toast(this.$t('text239'))
+      const res = await appRecharge({
+        address: this.account,
+        amount: this.amount,
+        certificateImage: this.imgPath,
+        chainType: this.chainType,
+        tokenType: 2
+      })
+      if (res.code == 200) {
+        console.log(res)
+      }
+    }
   }
 };
 </script>

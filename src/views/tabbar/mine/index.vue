@@ -98,8 +98,13 @@ export default {
     created(){
         this.switchChecked = this.getSwitchChecked
     },
+    mounted() {
+        if (this.token) {
+            this.setUserInfo()
+        }
+    },
     methods: {
-        ...mapActions(['setSwitchChecked']),
+        ...mapActions(['setSwitchChecked', 'setUserInfo']),
         ...mapMutations(['removeUserInfo']),
         changeMode(e) {
             this.setSwitchChecked(e)

@@ -28,10 +28,10 @@
       </div>
     </div>
     <div class="box proportion-box">
-      <div v-for="(i,k) in proportionList" :key="k" class="proportion-item">
-        <div>{{i.title}}</div>
-        <div class="proportion-content">{{i.content}}</div>
-        <div class="proportion-percentage">{{i.percentage}}</div>
+      <div v-for="(i,k) in proportionList" :key="k" class="proportion-item" v-if="k < 3">
+        <div>{{i.symbol}}/USDT</div>
+        <div class="proportion-content" :style="{color: `${Number(i.percentChange24h) > 0 ? '#51bc86' : '#f6465d'}`}">{{Number(Number(i.price).toFixed(8))}}</div>
+        <div class="proportion-percentage" :style="{color: `${Number(i.percentChange24h) > 0 ? '#51bc86' : '#f6465d'}`}">{{getPercent(i.percentChange24h) >= 0 ? '+' : ''}}{{getPercent(i.percentChange24h)}}%</div>
       </div>
     </div>
     <div class="box tab-box">
@@ -43,19 +43,19 @@
         <div style="flex:1">{{$t('text12')}}</div>
         <div style="flex:1;text-align:right">{{$t('text13')}}</div>
       </div>
-      <div v-for="(i,k) in 2" :key="k" class="table-item">
+      <div v-for="(i,k) in proportionList" :key="i.symbol" class="table-item">
         <div class="table-name">
-          <img src="@/assets/images/home/b1.png" class="name-icon" alt />
+          <img :src="i.symbol ? getLogo(i.symbol) : ''" class="name-icon" alt />
           <div class="table-name-text">
             <span class="table-name-text1">
-              BTC
+              {{i.symbol}}
               <span class="table-name-text2">/USDT</span>
             </span>
           </div>
         </div>
-        <div class="table-price">41835.14</div>
+        <div class="table-price">{{Number(Number(i.price).toFixed(8))}}</div>
         <div class="table-rise">
-          <div :class="['table-button-up',k==1?'table-button-down':'']">+0.12%</div>
+          <div :class="{'table-button-up': true, 'table-button-down': Number(i.percentChange24h) >= 0}">{{getPercent(i.percentChange24h) >= 0 ? '+' : ''}}{{getPercent(i.percentChange24h)}}%</div>
         </div>
       </div>
     </div>
@@ -64,6 +64,8 @@
 
 <script>
 import setLang from "@/components/setLang";
+import { getLastPrice } from "@/api/home.js";
+import {mapGetters} from "vuex"
 export default {
   name: "Home",
   components: { setLang },
@@ -79,33 +81,60 @@ export default {
           name: this.$t("text2"),
           icon: require("@/assets/images/home/ppmp.png")
         },
-        {
-          name: this.$t("text3"),
-          icon: require("@/assets/images/home/lmlm.png")
-        },
+        // {
+        //   name: this.$t("text3"),
+        //   icon: require("@/assets/images/home/lmlm.png")
+        // },
         {
           name: this.$t("text4"),
           icon: require("@/assets/images/home/lockMining.png")
         }
       ],
-      proportionList: [
-        {
-          title: "BTC/USDT",
-          content: "41806.12",
-          percentage: "-0.87%"
-        },
-        {
-          title: "ETH/USDT",
-          content: "41806.12",
-          percentage: "-0.87%"
-        },
-        {
-          title: "LTC/USDT",
-          content: "41806.12",
-          percentage: "-0.87%"
-        }
-      ]
+      proportionList: []
     };
+  },
+  computed: {
+    ...mapGetters(['coinList']),
+  },
+  created() {
+    this.getList()
+  },
+  methods: {
+    getLogo(e) {
+      let index = this.coinList.findIndex(o => {
+        return String(o.label).toLocaleLowerCase() === String(e).toLocaleLowerCase()
+      })
+      if (index !== -1) return this.coinList[index].logo
+      return this.coinList[0].logo
+    },
+    getPercent(e) {
+      if (!(e && String(e).length > 0)) return '0'
+      let n = String(e)
+      let list = n.split('')
+      let index = list.findIndex(o => o === '.')
+      if (index !== -1) {
+        let b = list.slice(0, index)
+        let a = list.slice(index + 1, list.length)
+        if (a.length > 2) {
+          if (Number(a[0]) === 0 && Number(a[1]) === 0) {
+            let nIn = a.findIndex(o => Number(o) !== 0)
+            if (nIn !== -1) {
+              let last = nIn + 2
+              return `${b.join('')}.${a.slice(0, last > a.length ? a.length : last).join('')}`
+            }
+          } else {
+            return `${b.join('')}.${a.slice(0, 2).join('')}`
+          }
+        }
+      }
+      return `${n}`
+    },
+    async getList() {
+      const res = await getLastPrice()
+      if (res.code == 200) {
+        this.proportionList = res.data || []
+      }
+    }
   }
 };
 </script>
@@ -135,7 +164,8 @@ export default {
   padding: 20px 0;
   .nav-item {
     text-align: center;
-    width: 33.33%;
+    // width: 33.33%;
+    width: 50%;
     font-size: 14px;
     color: #9ca3af;
     .nav-icon {

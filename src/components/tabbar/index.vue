@@ -34,12 +34,12 @@ export default {
           selIcon: require("@/assets/images/tabbar/hang1.png"),
           url: "/market"
         },
-        {
-          title: this.$t("text6"),
-          icon: this.getSwitchChecked?require("@/assets/images/tabbar/trade0.png"):require("@/assets/images/tabbar/trade2.png"),
-          selIcon: require("@/assets/images/tabbar/trade1.png"),
-          url: "/trade"
-        },
+        // {
+        //   title: this.$t("text6"),
+        //   icon: this.getSwitchChecked?require("@/assets/images/tabbar/trade0.png"):require("@/assets/images/tabbar/trade2.png"),
+        //   selIcon: require("@/assets/images/tabbar/trade1.png"),
+        //   url: "/trade"
+        // },
         {
           title: this.$t("text7"),
           icon: this.getSwitchChecked?require("@/assets/images/tabbar/gang0.png"):require("@/assets/images/tabbar/gang2.png"),

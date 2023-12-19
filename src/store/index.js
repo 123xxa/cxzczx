@@ -10,12 +10,115 @@ export default new Vuex.Store({
     switchChecked: switchCheckedStr,
     token: localStorage.getItem(config.tokenKey) || "",
     userInfo: JSON.parse(localStorage.getItem(config.userInfoKey)) || {},
+    coinList: [
+      {
+        logo: require('@/assets/images/withdrawCoins/1.png'),
+        label: 'USDT'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/2.png'),
+        label: 'BTC'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/3.png'),
+        label: 'ETH'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/4.png'),
+        label: 'LTC'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/5.png'),
+        label: 'BCH'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/6.png'),
+        label: 'USDC'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/7.jpg'),
+        label: 'XCC'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/8.jpg'),
+        label: 'MDA'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/9.jpg'),
+        label: 'DOTS'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/10.jpg'),
+        label: 'FDE'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/11.jpg'),
+        label: 'ESMY'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/12.jpg'),
+        label: 'VTSD'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/13.jpg'),
+        label: 'TWB'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/14.jpg'),
+        label: 'WHD'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/15.jpg'),
+        label: 'QCM'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/16.jpg'),
+        label: 'ALIDD'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/17.jpg'),
+        label: 'MTC'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/18.jpg'),
+        label: 'AITO'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/19.png'),
+        label: 'AVAX'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/20.png'),
+        label: 'LINK'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/21.png'),
+        label: 'MATIC'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/22.png'),
+        label: 'BNB'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/23.png'),
+        label: 'DOT'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/24.png'),
+        label: 'TRX'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/25.png'),
+        label: 'DOGE'
+      }
+    ]
   },
   getters: {
     getLang:state => state.lang,
     getSwitchChecked:state => state.switchChecked,
     token:state => state.token,
-    userInfo:state => state.userInfo
+    userInfo:state => state.userInfo,
+    coinList:state => state.coinList
   },
   mutations: {
     SET_LANG: (state, data) => {
