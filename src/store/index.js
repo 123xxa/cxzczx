@@ -10,6 +10,7 @@ export default new Vuex.Store({
     switchChecked: switchCheckedStr,
     token: localStorage.getItem(config.tokenKey) || "",
     userInfo: JSON.parse(localStorage.getItem(config.userInfoKey)) || {},
+    coinMainList: [],
     coinList: [
       {
         logo: require('@/assets/images/withdrawCoins/1.png'),
@@ -118,7 +119,8 @@ export default new Vuex.Store({
     getSwitchChecked:state => state.switchChecked,
     token:state => state.token,
     userInfo:state => state.userInfo,
-    coinList:state => state.coinList
+    coinList:state => state.coinList,
+    coinMainList:state => state.coinMainList
   },
   mutations: {
     SET_LANG: (state, data) => {
@@ -151,6 +153,9 @@ export default new Vuex.Store({
       state.token = ""
       localStorage.removeItem(config.tokenKey)
       localStorage.removeItem(config.userInfoKey)
+    },
+    changeCoinMainList(state, data){
+      state.coinMainList = JSON.parse(JSON.stringify(data));
     },
   },
   actions: {

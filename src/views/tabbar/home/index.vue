@@ -94,7 +94,27 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['coinList']),
+    ...mapGetters(['coinList', 'coinMainList']),
+  },
+  watch: {
+    coinMainList: {
+      handler(newVal, oldVal) {
+        let arr = newVal || []
+        if (this.proportionList && this.proportionList.length > 0 && arr && arr.length > 0) {
+          arr.map(item => {
+            let index = this.proportionList.findIndex(o => o.cryptoId == item.cryptoId)
+            if (index !== -1) {
+              this.proportionList[index].volumeChange24h = item.volumeChange24h
+              this.proportionList[index].price = item.price
+              this.proportionList[index].percentChange24h = item.percentChange24h
+            }
+            return item
+          })
+          console.log(arr)
+        }
+      },
+      immediate: true
+    }
   },
   created() {
     this.getList()

@@ -40,12 +40,36 @@
 
 <script>
   import { getLastPrice } from "@/api/home.js";
+  import {mapGetters} from "vuex"
   export default {
     data() {
       return {
         list: [],
         sortType: '',
         sortIndex: null,
+      }
+    },
+    computed:{
+        ...mapGetters(['coinMainList'])
+    },
+    watch: {
+      coinMainList: {
+        handler(newVal, oldVal) {
+          let arr = newVal || []
+          if (this.list && this.list.length > 0 && arr && arr.length > 0) {
+            arr.map(item => {
+              let index = this.list.findIndex(o => o.cryptoId == item.cryptoId)
+              if (index !== -1) {
+                this.list[index].volumeChange24h = item.volumeChange24h
+                this.list[index].price = item.price
+                this.list[index].percentChange24h = item.percentChange24h
+              }
+              return item
+            })
+            console.log(arr)
+          }
+        },
+        immediate: true
       }
     },
     created() {

@@ -4,10 +4,14 @@
   </div>
 </template>
 <script>
+  import { getSocket } from '@/utils/webSocket'
   export default {
     created(){
       this.$store.commit('SET_SWITCH_CHECKED',this.$store.state.switchChecked)
-    }
+    },
+    mounted() {
+      getSocket()
+    },
   }
 </script>
 <style >
