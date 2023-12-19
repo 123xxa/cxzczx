@@ -22,7 +22,8 @@
         <van-field class="input" v-model="amount" type="number" :placeholder="$t('text206')" />
         <div class="input-label" style="margin: 20px 0;">{{ $t('text207') }}</div>
         <van-uploader :after-read="afterRead">
-          <div class="upload-box"></div>
+          <img :src="imgPath" alt="" v-if="imgPath" class="upload-img">
+          <div class="upload-box" v-else></div>
         </van-uploader>
         <div class="input-label" style="margin: 0;">{{ $t('text208') }}</div>
       </div>
@@ -131,7 +132,9 @@ export default {
       formData.append("file", content);
       //获取formdata表单所有的数据
       const res = await imageUploader(formData)
-      this.imgPath = res
+      if (res.code == 200) {
+        this.imgPath = res.data
+      }
     },
     async submit() {
       if (!this.account) return this.$toast(this.$t('text204'))
@@ -224,6 +227,12 @@ export default {
         ::placeholder {
           color: #808080;
         }
+      }
+      .upload-img {
+        width: 88px;
+        height: 88px;
+        margin: 5px 0px 10px 0px;
+        border: 1px solid var(--color);
       }
       .upload-box {
         width: 88px;

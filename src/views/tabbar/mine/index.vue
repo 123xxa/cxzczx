@@ -38,21 +38,21 @@
             <div class="item-left">{{ $t('text57') }}</div>
             <van-icon name="arrow" color="#A5A8AC" size="19"/>
         </div>
-        <div class="item" @click="$router.push('/transfer')">
+        <!-- <div class="item" @click="$router.push('/transfer')">
             <div class="item-left">{{ $t('text58') }}</div>
             <van-icon name="arrow" color="#A5A8AC" size="19"/>
         </div>
         <div class="item">
             <div class="item-left">{{ $t('text59') }}</div>
             <van-icon name="arrow" color="#A5A8AC" size="19"/>
-        </div>
+        </div> -->
     </div>
     <div class="title">{{ $t('text54') }}</div>
     <div class="box">
-        <div class="item">
+        <!-- <div class="item">
             <div class="item-left">{{ $t('text60') }}</div>
             <van-icon name="arrow" color="#A5A8AC" size="19"/>
-        </div>
+        </div> -->
         <div class="item">
             <div class="item-left">{{ $t('text61') }}</div>
             <van-icon name="arrow" color="#A5A8AC" size="19"/>
@@ -68,10 +68,10 @@
             <div class="item-left">{{ $t('text63') }}</div>
             <van-icon name="arrow" color="#A5A8AC" size="19"/>
         </div>
-        <div class="item">
+        <!-- <div class="item">
             <div class="item-left">{{ $t('text64') }}</div>
             <van-icon name="arrow" color="#A5A8AC" size="19"/>
-        </div>
+        </div> -->
         <div class="item">
             <div class="item-left">{{ $t('text65') }}</div>
             <van-switch v-model="switchChecked" size="20"  @change="changeMode" />
