@@ -110,7 +110,6 @@ export default {
             }
             return item
           })
-          console.log(arr)
         }
       },
       immediate: true
