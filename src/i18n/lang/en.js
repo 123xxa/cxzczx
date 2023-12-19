@@ -157,7 +157,7 @@ export default {
     text237:"Minimum withdrawal amoun10.000000",
     text238:"Please enter the transaction password",
     text239:"Please upload your voucher",
-    text240:"",
+    text240:"The submission is successful and awaiting review",
     text241:"",
     text242:"",
     text243:"",
