@@ -148,7 +148,6 @@ export default {
         tokenType: 2
       })
       if (res.code == 200) {
-        console.log(res)
         this.$toast(this.$t('text240'))
       }
     }
