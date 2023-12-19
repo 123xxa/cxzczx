@@ -30,8 +30,8 @@
     <div class="box proportion-box">
       <div v-for="(i,k) in proportionList" :key="k" class="proportion-item" v-if="k < 3">
         <div>{{i.symbol}}/USDT</div>
-        <div class="proportion-content" :style="{color: `${Number(i.percentChange24h) > 0 ? '#51bc86' : '#f6465d'}`}">{{Number(Number(i.price).toFixed(8))}}</div>
-        <div class="proportion-percentage" :style="{color: `${Number(i.percentChange24h) > 0 ? '#51bc86' : '#f6465d'}`}">{{getPercent(i.percentChange24h) >= 0 ? '+' : ''}}{{getPercent(i.percentChange24h)}}%</div>
+        <div class="proportion-content" :style="{color: `${Number(i.percentChange24h) >= 0 ? '#51bc86' : '#f6465d'}`}">{{Number(Number(i.price).toFixed(8))}}</div>
+        <div class="proportion-percentage" :style="{color: `${Number(i.percentChange24h) >= 0 ? '#51bc86' : '#f6465d'}`}">{{getPercent(i.percentChange24h) >= 0 ? '+' : ''}}{{getPercent(i.percentChange24h)}}%</div>
       </div>
     </div>
     <div class="box tab-box">

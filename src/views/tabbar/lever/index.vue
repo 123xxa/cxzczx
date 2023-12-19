@@ -7,8 +7,8 @@
         <div class="top-b">
   
           <img src="@/assets/images/lever/list.png" class="top-list-icon" @click="show =true" alt />
-          <span class="top-b-text1">BTC / USDT</span>
-          <span class="top-b-text2">-1.20%</span>
+          <span class="top-b-text1">{{ list && list.length !== 0 ? list[listIndex].symbol : '--' }} / USDT</span>
+          <span class="top-b-text2" :style="{color: `${Number(list[listIndex].percentChange24h) >= 0 ? '#51bc86' : '#f6465d'}`}" v-if="list && list.length !== 0">{{getPercent(list[listIndex].percentChange24h) >= 0 ? '+' : ''}}{{getPercent(list[listIndex].percentChange24h)}}%</span>
           <!-- <div>
                     <img src="@/assets/images/lever/datamap.png" alt="" style="width:20px;height:20px;">
                     <img src="@/assets/images/lever/record1.png" alt="" style="height:15px;width: 15px;">
@@ -16,7 +16,7 @@
         </div>
       </div>
     <div class="m">
-      <div class="m-l">40960.16</div>
+      <div class="m-l" :style="{color: `${Number(list && list.length !== 0 ? list[listIndex].percentChange24h : 0) >= 0 ? '#51bc86' : '#f6465d'}`}">{{ Number(Number(list && list.length !== 0 ? list[listIndex].price : 0).toFixed(8)) }}</div>
       <div class="m-r">
         <div>
           <div>{{ $t('text35') }}</div>
@@ -24,9 +24,9 @@
           <div>{{ $t('text37') }}</div>
         </div>
         <div>
-          <div>42202.55</div>
-          <div>42202.55</div>
-          <div>42202.55</div>
+          <div>{{ Number(Number(list && list.length !== 0 ? list[listIndex].price : 0).toFixed(8)) }}</div>
+          <div>{{ Number(Number(list && list.length !== 0 ? list[listIndex].price : 0).toFixed(8)) }}</div>
+          <div>{{ Number(Number(list && list.length !== 0 ? list[listIndex].price : 0).toFixed(8)) }}</div>
         </div>
       </div>
     </div>
@@ -51,11 +51,11 @@
       :chart-config="{TB_ICON_BRI: 1}"
     ></trading-vue>
 
-    <div class="list">
-      <div class="list-item" v-for="(i,k) in prodList" :key="k">
-         <div>{{ i }} {{ $t('text38') }}</div>
-         <div class="list-item-text">{{ $t('text39') }}50%</div>
-         <img src="@/assets/images/lever/icon.png" class="list-icon" alt="">
+    <div class="list" v-if="prodList && prodList.length !== 0">
+      <div class="list-item" v-for="(i,k) in prodList" :key="k" @click="prodIndex = k">
+         <div>{{ i.profitRatesTime }} {{ $t('text38') }}</div>
+         <div class="list-item-text">{{ $t('text39') }}{{Number(Number((i.profitRates || 0) * 100).toFixed(2))}}%</div>
+         <img src="@/assets/images/lever/icon.png" class="list-icon" alt="" v-if="prodIndex == k">
       </div>
     </div>
     <div class="text">{{ $t('text40') }}</div>
@@ -67,31 +67,53 @@
     </div>
     <div class="text">{{ $t('text41') }}</div>
     <div class="input-content">
-      <van-field
-      class="input"
-    v-model="value1"
-    label=""
-    right-icon="arrow"
-    placeholder=""
-  />
+      <van-field class="input" v-model="amount" label="" right-icon="arrow" placeholder="" type="number" />
     </div>
     <div class="text">
       <div class="text-item">
         <img src="@/assets/images/lever/moy.png" style="width: 20px; height: 20px;" alt="">
         <span>{{ $t('text42') }}</span>
       </div>
-      <div>0USDT</div>
+      <div>{{ token && userInfo && userInfo.usdt || 0 }} USDT</div>
     </div>
     <div class="btn-group">
-      <div class="btn">{{ $t('text43') }}</div>
-      <div class="btn btn2">{{ $t('text44') }}</div>
+      <div class="btn" @click="openVan(0)">{{ $t('text43') }}</div>
+      <div class="btn btn2" @click="openVan(1)">{{ $t('text44') }}</div>
     </div>
     <div class="record-tab">
       <div class="record-tab record-tab-active">{{ $t('text45') }}</div>
       <div class="record-tab">{{ $t('text46') }}</div>
     </div>
     <empty/>
-    <list :show.sync="show" />
+    <list :show.sync="show" :list="list" :index="listIndex" @changeIndex="changeIndex" />
+    <van-overlay :show="confirmShow" z-index="9999">
+      <div class="confirm-box" v-if="prodList && prodList.length !== 0">
+        <div class="confirm-title">{{ $t('text241') }}
+          <van-icon name="cross" class="close" color="#000000" size="18" @click="confirmShow = false" />
+        </div>
+        <div class="confirm-item" style="margin-top: 22px;">{{ list && list.length !== 0 ? list[listIndex].symbol : '--' }}/USDT</div>
+        <div class="confirm-item">
+          <div>{{ $t('text242') }}</div>
+          <div>{{ payDropRise == 1 ? $t('text44') : $t('text43') }}</div>
+        </div>
+        <div class="confirm-item">
+          <div>{{ $t('text41') }}</div>
+          <div>{{ amount }}</div>
+        </div>
+        <div class="confirm-item">
+          <div>{{ $t('text38') }}</div>
+          <div>{{ prodList[prodIndex].profitRatesTime }}</div>
+        </div>
+        <div class="confirm-item" style="margin-bottom: 22px;">
+          <div>{{ $t('text39') }}</div>
+          <div>{{Number(Number((prodList[prodIndex].profitRates || 0) * 100).toFixed(2))}}%</div>
+        </div>
+        <div class="c-btn-group">
+          <div class="btn cancel" @click="confirmShow = false">{{ $t('text95') }}</div>
+          <div class="btn confirm" @click="submit">{{ $t('text94') }}</div>
+        </div>
+      </div>
+    </van-overlay>
   </div>
 </template>
 
@@ -99,15 +121,36 @@
 import { Data2 } from "./test.js";
 import TradingVue from "trading-vue-js";
 import list from "./list.vue";
-import {mapGetters} from "vuex"
+import {mapGetters,mapActions} from "vuex"
+import { getProfitRatesList, postOrder, getLastPrice } from '@/api/home.js'
 export default {
-  components: { TradingVue ,list},
+  components: { TradingVue, list },
   computed:{
-    ...mapGetters(['getSwitchChecked'])
+    ...mapGetters(['getSwitchChecked', 'coinMainList', 'userInfo', 'token'])
+  },
+  watch: {
+    coinMainList: {
+      handler(newVal, oldVal) {
+        let arr = newVal || []
+        if (this.proportionList && this.proportionList.length > 0 && arr && arr.length > 0) {
+          arr.map(item => {
+            let index = this.proportionList.findIndex(o => o.cryptoId == item.cryptoId)
+            if (index !== -1) {
+              this.proportionList[index].volumeChange24h = item.volumeChange24h
+              this.proportionList[index].price = item.price
+              this.proportionList[index].percentChange24h = item.percentChange24h
+            }
+            return item
+          })
+        }
+      },
+      immediate: true
+    }
   },
   data() {
     return {
-      prodList:[30,60,120,180,300,450,600],
+      prodIndex:0,
+      prodList:[],
       show:false,
       width: 0,
       chartData: Data2,
@@ -146,12 +189,76 @@ export default {
           title: "1mon",
           value: 8
         }
-      ]
+      ],
+      amount: '',
+      payDropRise: 0,
+      confirmShow: false,
+      list: [],
+      listIndex: 0,
     };
   },
   created() {
     this.width = document.documentElement.clientWidth;
-  }
+    this.getRatesList()
+    this.getList()
+  },
+  methods: {
+    ...mapActions(['setUserInfo']),
+    getPercent(e) {
+      if (!(e && String(e).length > 0)) return '0'
+      let n = String(e)
+      let list = n.split('')
+      let index = list.findIndex(o => o === '.')
+      if (index !== -1) {
+        let b = list.slice(0, index)
+        let a = list.slice(index + 1, list.length)
+        if (a.length > 2) {
+          if (Number(a[0]) === 0 && Number(a[1]) === 0) {
+            let nIn = a.findIndex(o => Number(o) !== 0)
+            if (nIn !== -1) {
+              let last = nIn + 2
+              return `${b.join('')}.${a.slice(0, last > a.length ? a.length : last).join('')}`
+            }
+          } else {
+            return `${b.join('')}.${a.slice(0, 2).join('')}`
+          }
+        }
+      }
+      return `${n}`
+    },
+    changeIndex(index) {
+      this.listIndex = index
+    },
+    openVan(type) {
+      this.payDropRise = type
+      this.confirmShow = true
+    },
+    async getList() {
+      const res = await getLastPrice()
+      if (res.code == 200) {
+        this.list = res.data || []
+      }
+    },
+    async getRatesList() {
+      const res = await getProfitRatesList()
+      if (res.code == 200) {
+        this.prodList = res.data || []
+      }
+    },
+    async submit() {
+      const res = await postOrder({
+        profitRatesTime: this.prodList[this.prodIndex].profitRatesTime,
+        amount: this.amount,
+        payDropRise: this.payDropRise,
+        cryptoId: this.list[this.listIndex].cryptoId
+      })
+      if (res.code == 200) {
+        this.$toast(this.$t('text243'))
+        this.confirmShow = false
+        this.setUserInfo()
+      }
+    }
+  },
 };
 </script>
 
@@ -340,6 +447,68 @@ export default {
     right: 0;
     height: 2px;
     background:  var(--color);
+  }
+}
+.confirm-box {
+  width: 360px;
+  height: fit-content;
+  position: fixed;
+  left: 50vw;
+  top: 50vh;
+  transform: translate(-50%, -50%);
+  background: #FFFFFF;
+  color: #333333;
+  font-size: 14px;
+  border-radius: 5px;
+  overflow: hidden;
+  .confirm-title {
+    width: 100%;
+    height: 55px;
+    line-height: 55px;
+    text-align: center;
+    font-size: 17px;
+    color: #000000;
+    border-bottom: 1px solid #e5e7eb;
+    position: relative;
+    .close {
+      position: absolute;
+      top: 50%;
+      right: 16px;
+      transform: translateY(-50%);
+    }
+  }
+  
+  .confirm-item {
+    width: 100%;
+    padding: 0 22px;
+    box-sizing: border-box;
+    margin-top: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .c-btn-group {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    .btn {
+      width: 50%;
+      height: 44px;
+      line-height: 44px;
+      text-align: center;
+      font-size: 15px;
+      background: #f2f2f2;
+      box-sizing: border-box;
+      &:first-child {
+        border-right: 1px solid #e5e7eb;
+      }
+    }
+    .cancel {
+      color: #333333;
+    }
+    .confirm {
+      color: #40affe;
+    }
   }
 }
 </style>

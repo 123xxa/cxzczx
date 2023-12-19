@@ -8,40 +8,47 @@
           </div>
         </div>
       </van-sticky>
-     <div class="table-content">
-        <div class="table-item" v-for="(i, k) in 20" :key="k">
-      <div class="table-name">
-        <div class="table-name-text">
-          <span class="table-name-text1"> BTC<span class="table-name-text2">/USDT</span> </span>
-        </div>
-        <div>
+      <div class="table-content">
+        <div class="table-item" v-for="(i, k) in list" :key="k" :style="{background: `${index == k ? '#4b5563' : 'var(--bg-color)'}`}" @click="$emit('changeIndex', k)">
+          <div class="table-name">
+            <div class="table-name-text">
+              <span class="table-name-text1"> {{ i.symbol }}<span class="table-name-text2">/USDT</span> </span>
+            </div>
+            <div>
+            </div>
+          </div>
+          <div class="table-rise">
+            <div class="table-button-text" :style="{color: `${Number(i.percentChange24h) >= 0 ? '#51bc86' : '#f6465d'}`}">{{ Number(Number(i.price).toFixed(8)) }}</div>
+          </div>
         </div>
       </div>
-      <div class="table-rise">
-        <div class="table-button-text">123123.12</div>
-      </div>
-    </div>
-     </div>
-          
     </div>
   </van-overlay>
 </template>
 
 <script>
 export default {
-    props:{
-        show:{
-            default:false
-        }
+  props: {
+    show: {
+      default: false
     },
+    list: {
+      type: Array,
+      default: () => []
+    },
+    index: {
+      type: Number,
+      default: 0
+    }
+  },
   data() {
     return {
-      
+
     };
   },
-  methods:{
-    close(){
-        this.$emit('update:show',false)
+  methods: {
+    close() {
+      this.$emit('update:show', false)
     },
   }
 };
@@ -55,11 +62,13 @@ export default {
   bottom: 0;
   width: 280px;
   background: var(--bg-color);
+
   .tab-box {
     padding: 15px 20px;
     box-sizing: border-box;
     display: flex;
     margin: 0;
+
     .tab-item {
       color: rgba(255, 206, 28, 1);
       font-size: 16px;
@@ -68,51 +77,59 @@ export default {
       font-weight: 600;
     }
   }
-  .table-content{
+
+  .table-content {
     height: calc(100vh - 50px);
     overflow-y: auto;
   }
+
   .table-item {
-  box-sizing: border-box;
-  padding: 20px 10px;
-  display: flex;
-  align-items: center;
-  background: var(--bg-color);
-  border-bottom: 1px solid #4B5563;
-  .table-name {
-    flex: 1.5 1 0%;
-    .name-icon {
-      width: 20px;
-      height: 20px;
-      margin-right: 10px;
-    }
-    .table-name-text2 {
-      font-size: 12px;
-      color: #9ca3af;
-      font-weight: 500;
-    }
-    .table-name-text1 {
-      font-size: 14px;
-      color: var(--color);
-      font-weight: 700;
-    }
-  }
-  .table-price {
-    flex: 1;
-    font-size: 14px;
-    color: #fff;
-    font-weight: 700;
-  }
-  .table-rise {
-    flex: 1;
-    text-align: right;
+    box-sizing: border-box;
+    padding: 20px 10px;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    .table-button-text{
-      color: #51bc86;
+    background: var(--bg-color);
+    border-bottom: 1px solid #4B5563;
+
+    .table-name {
+      flex: 1.5 1 0%;
+
+      .name-icon {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+      }
+
+      .table-name-text2 {
+        font-size: 12px;
+        color: #9ca3af;
+        font-weight: 500;
+      }
+
+      .table-name-text1 {
+        font-size: 14px;
+        color: var(--color);
+        font-weight: 700;
+      }
+    }
+
+    .table-price {
+      flex: 1;
+      font-size: 14px;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .table-rise {
+      flex: 1;
+      text-align: right;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+
+      .table-button-text {
+        color: #51bc86;
+      }
     }
   }
-}
-}
-</style>
+}</style>
