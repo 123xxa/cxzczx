@@ -23,9 +23,10 @@
         <div class="n-box">
           <div class="n-title">{{ $t('text232') }}</div>
           <div class="input-box">
-            <div class="input" v-if="address"></div>
+            <van-field v-model="address" type="text" class="input" :placeholder="$t('text235')" />
+            <!-- <div class="input" v-if="address"></div>
             <div class="placeholder" v-else>{{ $t('text235') }}</div>
-            <div class="all">{{ $t('text236') }}</div>
+            <div class="all">{{ $t('text236') }}</div> -->
           </div>
         </div>
         <div class="n-box">
@@ -36,12 +37,12 @@
             <div class="all">{{ $t('text222') }}</div>
           </div>
         </div>
-        <div class="n-box">
+        <!-- <div class="n-box">
           <div class="n-title">{{ $t('text233') }}</div>
           <div class="input-box">
             <van-field v-model="password" type="password" class="input" :placeholder="$t('text238')" />
           </div>
-        </div>
+        </div> -->
         <div class="n-box">
           <div class="n-title">
             <div class="left">{{ $t('text234') }}</div>
@@ -49,7 +50,7 @@
           </div>
         </div>
         <div class="n-box">
-          <div class="n-tip">Handling fee：0.0050 {{ list[listIndex].label }}</div>
+          <div class="n-tip">Handling fee：{{handlingFee}} {{ list[listIndex].label }}</div>
         </div>
         <div class="yellow-btn">{{ $t('text229') }}</div>
       </div>
@@ -69,6 +70,7 @@
 </template>
 
 <script>
+import { getHandlingFee } from "@/api/withdrawal.js";
 export default {
   data() {
     return {
@@ -87,7 +89,8 @@ export default {
       ],
       typeIndex: 0,
       listIndex: 0,
-      recordList: []
+      recordList: [],
+      handlingFee: 5
     };
   },
   computed: {
@@ -102,6 +105,16 @@ export default {
     goback() {
       this.$router.go(-1)
     },
+    async getHandlingFee () {
+      const res = await getHandlingFee()
+      console.log(res)
+      if (res.code === 200) {
+        this.handlingFee = parseFloat(res.data)
+      }
+    }
+  },
+  mounted () {
+    this.getHandlingFee()
   }
 };
 </script>
