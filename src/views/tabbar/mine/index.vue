@@ -57,10 +57,10 @@
             <div class="item-left">{{ $t('text61') }}</div>
             <van-icon name="arrow" color="#A5A8AC" size="19"/>
         </div>
-        <div class="item">
+        <!-- <div class="item">
             <div class="item-left">{{ $t('text62') }}</div>
             <van-icon name="arrow" color="#A5A8AC" size="19"/>
-        </div>
+        </div> -->
     </div>
     <div class="title">{{ $t('text55') }}</div>
     <div class="box">

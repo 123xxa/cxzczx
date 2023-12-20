@@ -15,13 +15,13 @@
         <img :src="i" alt class="swipe-img" />
       </van-swipe-item>
     </van-swipe>
-    <div class="box nav-box">
+    <!-- <div class="box nav-box">
       <div class="nav-item" v-for="(i, k) in navList" :key="k">
         <img :src="i.icon" class="nav-icon" alt />
         <div>{{ i.name }}</div>
       </div>
-    </div>
-    <div class="box recharge-box">
+    </div> -->
+    <div class="box recharge-box" @click="$router.push('/recharge')">
       <div style="width: 100%;">
         <div class="recharge-box-top">{{$t('text9')}}</div>
         <div class="recharge-box-bottom">{{$t('text10')}}</div>
