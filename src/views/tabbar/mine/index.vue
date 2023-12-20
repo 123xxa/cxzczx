@@ -23,7 +23,7 @@
         </div>
         <div class="top-info-box2">{{$t('text52') }} (USDT)</div>
         <div class="top-info-box3">{{ viewFlag? (token && userInfo && userInfo.usdt || 0) :'******'}}</div>
-        <div  class="top-info-box4">
+        <div class="top-info-box4" @click="$router.push('/wallet')">
             <div class="top-info-box4-l">{{ viewFlag? $t('text53') +`: ${token && userInfo && userInfo.usdt || 0}` :'******'}}</div>
             <van-icon name="arrow" color="#A5A8AC" size="19"/>
         </div>

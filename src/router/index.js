@@ -81,6 +81,16 @@ const routes = [
     path:"/withdrawal",
     name:"withdrawal",
     component:()=>import(/* webpackChunkName: "home" */ '@/views/withdrawal/index.vue')
+  },
+  {
+    path:"/wallet",
+    name:"wallet",
+    component:()=>import(/* webpackChunkName: "home" */ '@/views/wallet/index.vue')
+  },
+  {
+    path:"/flow",
+    name:"flow",
+    component:()=>import(/* webpackChunkName: "home" */ '@/views/wallet/flow.vue')
   }
 ]
 

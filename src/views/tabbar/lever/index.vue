@@ -18,15 +18,15 @@
     <div class="m">
       <div class="m-l" :style="{color: `${Number(list && list.length !== 0 ? list[listIndex].percentChange24h : 0) >= 0 ? '#51bc86' : '#f6465d'}`}">{{ Number(Number(list && list.length !== 0 ? list[listIndex].price : 0).toFixed(8)) }}</div>
       <div class="m-r">
-        <div>
+        <div style="margin-right: 5px">
           <div>{{ $t('text35') }}</div>
           <div>{{ $t('text36') }}</div>
-          <div>{{ $t('text37') }}</div>
+          <!-- <div>{{ $t('text37') }}</div> -->
         </div>
         <div>
-          <div>{{ Number(Number(list && list.length !== 0 ? list[listIndex].price : 0).toFixed(8)) }}</div>
-          <div>{{ Number(Number(list && list.length !== 0 ? list[listIndex].price : 0).toFixed(8)) }}</div>
-          <div>{{ Number(Number(list && list.length !== 0 ? list[listIndex].price : 0).toFixed(8)) }}</div>
+          <div>{{ Number(Number(list && list.length !== 0 ? list[listIndex].maxPrice : 0).toFixed(8)) }}</div>
+          <div>{{ Number(Number(list && list.length !== 0 ? list[listIndex].minPrice : 0).toFixed(8)) }}</div>
+          <!-- <div>{{ Number(Number(list && list.length !== 0 ? list[listIndex].price : 0).toFixed(8)) }}</div> -->
         </div>
       </div>
     </div>
@@ -141,6 +141,8 @@ export default {
               this.list[index].volumeChange24h = item.volumeChange24h
               this.list[index].price = item.price
               this.list[index].percentChange24h = item.percentChange24h
+              this.list[index].maxPrice = item.maxPrice
+              this.list[index].minPrice = item.minPrice
             }
             return item
           })
