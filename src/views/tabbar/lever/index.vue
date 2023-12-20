@@ -278,7 +278,7 @@ export default {
         status: this.orderIndex
       })
       if (res.code == 200) {
-        this.orderList = res.rows || []
+        this.orderList = res.data || []
       }
     },
     changeChart(index) {
