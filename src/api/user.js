@@ -28,3 +28,20 @@ export function imageUploader(data) {
     data: data
   })
 }
+
+// 获取用户钱包
+export function getUserWallet() {
+  return request({
+    url: '/app/wallet/userAmount',
+    method: 'get'
+  })
+}
+
+// 查询流水
+export function getBalanceLog(data) {
+  return request({
+    url: '/app/balanceLog/list',
+    method: 'get',
+    params: data
+  })
+}

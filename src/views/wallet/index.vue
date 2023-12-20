@@ -17,9 +17,9 @@
                     <img src="@/assets/images/mine/f-b.png" alt="" class="f-img" v-else>
                 </div>
             </div>
-            <div class="money">{{ isView ? '0.0000000000' : '****' }}</div>
+            <div class="money">{{ isView ? (Number(amount) + Number(reviewAmount)) : '****' }}</div>
         </div>
-        <div class="bottom-box" @click="$router.push('/flow')">
+        <div class="bottom-box" @click="$router.push({ path: '/flow', query: {amount: amount, reviewAmount: reviewAmount} })">
             <div class="inside-box">
                 <div class="in-top-box">
                     <div class="symbol">USDT</div>
@@ -28,15 +28,15 @@
                 <div class="in-bottom-box">
                     <div class="b-item">
                         <div class="b-label">{{ $t('text223') }}</div>
-                        <div class="b-value">{{ isView ? '0.00000000' : '****' }}</div>
+                        <div class="b-value">{{ isView ? amount : '****' }}</div>
                     </div>
-                    <div class="b-item">
+                    <!-- <div class="b-item">
                         <div class="b-label">{{ $t('text250') }}（USDT）</div>
                         <div class="b-value">{{ isView ? '0.00' : '****' }}</div>
-                    </div>
+                    </div> -->
                     <div class="b-item">
                         <div class="b-label">{{ $t('text249') }}</div>
-                        <div class="b-value">{{ isView ? '0.00000000' : '****' }}</div>
+                        <div class="b-value">{{ isView ? reviewAmount : '****' }}</div>
                     </div>
                 </div>
             </div>
@@ -45,11 +45,17 @@
 </template>
   
 <script>
+import { getUserWallet } from '@/api/user.js'
 export default {
     data() {
         return {
             isView: true,
+            amount: 0,
+            reviewAmount: 0
         };
+    },
+    created() {
+        this.getInfo()
     },
     methods: {
         to(e) {
@@ -58,6 +64,13 @@ export default {
         goback() {
             this.$router.go(-1)
         },
+        async getInfo() {
+            const res = await getUserWallet()
+            if (res.code == 200) {
+                this.amount = res.data.amount || 0
+                this.reviewAmount = res.data.reviewAmount || 0
+            }
+        }
     }
 };
 </script>
