@@ -21,7 +21,7 @@
         <div>{{ i.name }}</div>
       </div>
     </div> -->
-    <div class="box recharge-box" @click="$router.push('/recharge')">
+    <div class="box recharge-box" @click="toOther('/recharge')">
       <div style="width: 100%;">
         <div class="recharge-box-top">{{$t('text9')}}</div>
         <div class="recharge-box-bottom">{{$t('text10')}}</div>
@@ -94,7 +94,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['coinList', 'coinMainList']),
+    ...mapGetters(['coinList', 'coinMainList', 'token']),
   },
   watch: {
     coinMainList: {
@@ -120,6 +120,13 @@ export default {
     this.getList()
   },
   methods: {
+    toOther(path) {
+      if (this.token) {
+        this.$router.push(path)
+      } else {
+        this.$router.push('/login')
+      }
+    },
     getLogo(e) {
       let index = this.coinList.findIndex(o => {
         return String(o.label).toLocaleLowerCase() === String(e).toLocaleLowerCase()

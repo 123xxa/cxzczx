@@ -91,6 +91,16 @@ const routes = [
     path:"/flow",
     name:"flow",
     component:()=>import(/* webpackChunkName: "home" */ '@/views/wallet/flow.vue')
+  },
+  {
+    path:"/security",
+    name:"security",
+    component:()=>import(/* webpackChunkName: "home" */ '@/views/security/index.vue')
+  },
+  {
+    path:"/resetLogin",
+    name:"resetLogin",
+    component:()=>import(/* webpackChunkName: "home" */ '@/views/security/resetLogin.vue')
   }
 ]
 

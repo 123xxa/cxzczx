@@ -64,3 +64,12 @@ export function resetAccount(data) {
     data: data
   })
 }
+
+// 修改登录密码
+export function updatePassword(data) {
+  return request({
+    url: '/app/updatePassword',
+    method: 'post',
+    data: data
+  })
+}

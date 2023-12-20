@@ -23,18 +23,18 @@
         </div>
         <div class="top-info-box2">{{$t('text52') }} (USDT)</div>
         <div class="top-info-box3">{{ viewFlag? (token && userInfo && userInfo.usdt || 0) :'******'}}</div>
-        <div class="top-info-box4" @click="$router.push('/wallet')">
+        <div class="top-info-box4" @click="toOther('/wallet')">
             <div class="top-info-box4-l">{{ viewFlag? $t('text53') +`: ${token && userInfo && userInfo.usdt || 0}` :'******'}}</div>
             <van-icon name="arrow" color="#A5A8AC" size="19"/>
         </div>
       </div>
     </div>
     <div class="box">
-        <div class="item" @click="$router.push('/recharge')">
+        <div class="item" @click="toOther('/recharge')">
             <div class="item-left">{{ $t('text56') }}</div>
             <van-icon name="arrow" color="#A5A8AC" size="19"/>
         </div>
-        <div class="item" @click="$router.push('/withdrawCoins')">
+        <div class="item" @click="toOther('/withdrawCoins')">
             <div class="item-left">{{ $t('text57') }}</div>
             <van-icon name="arrow" color="#A5A8AC" size="19"/>
         </div>
@@ -53,7 +53,7 @@
             <div class="item-left">{{ $t('text60') }}</div>
             <van-icon name="arrow" color="#A5A8AC" size="19"/>
         </div> -->
-        <div class="item">
+        <div class="item" @click="toOther('/security')">
             <div class="item-left">{{ $t('text61') }}</div>
             <van-icon name="arrow" color="#A5A8AC" size="19"/>
         </div>
@@ -106,6 +106,13 @@ export default {
     methods: {
         ...mapActions(['setSwitchChecked', 'setUserInfo']),
         ...mapMutations(['removeUserInfo']),
+        toOther(path) {
+            if (this.token) {
+                this.$router.push(path)
+            } else {
+                this.$router.push('/login')
+            }
+        },
         changeMode(e) {
             this.setSwitchChecked(e)
         },
