@@ -141,8 +141,6 @@ export default {
               this.list[index].volumeChange24h = item.volumeChange24h
               this.list[index].price = item.price
               this.list[index].percentChange24h = item.percentChange24h
-              this.list[index].maxPrice = item.maxPrice
-              this.list[index].minPrice = item.minPrice
             }
             return item
           })
