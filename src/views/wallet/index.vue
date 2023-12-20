@@ -10,8 +10,10 @@
         </van-nav-bar>
         <div class="top-box">
             <div class="title-box">
-                <div class="l-title">{{ $t('text247') }}</div>
-                <div class="m-tip">{{ $t('text248') }}（USDT）</div>
+                <div class="m-tip">
+                    <span class="l-title">{{ $t('text247') }}</span>
+                    {{ $t('text248') }}（USDT）
+                </div>
                 <div class="img-box" @click="isView = !isView">
                     <img src="@/assets/images/mine/f-a.png" alt="" class="f-img" v-if="isView">
                     <img src="@/assets/images/mine/f-b.png" alt="" class="f-img" v-else>
@@ -96,10 +98,11 @@ export default {
         .title-box {
             width: 100%;
             display: flex;
-            align-items: center;
+            // align-items: center;
             .l-title {
                 font-size: 17px;
-                font-weight: 700;
+                color: var(--color);
+                // font-weight: 700;
                 margin-right: 11px;
                 white-space: nowrap;
             }
@@ -107,6 +110,7 @@ export default {
                 flex: 1;
                 font-size: 13px;
                 color: #9ca3af;
+                line-height: 20px;
             }
             .img-box {
                 width: 22px;

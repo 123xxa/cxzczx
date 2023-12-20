@@ -170,7 +170,7 @@ export default new Vuex.Store({
     },
     setUserInfo({commit}, data) {
       getInfo().then(res => {
-        console.log(res)
+        // console.log(res)
         commit("SET_USERINFO", res.data);
       })
       // commit("SET_USERINFO", data);
