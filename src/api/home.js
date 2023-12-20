@@ -24,3 +24,21 @@ export function postOrder(data) {
     data: data
   })
 }
+
+// 获取订单列表
+export function getOrderList(data) {
+  return request({
+    url: '/app/order/list',
+    method: 'get',
+    params: data
+  })
+}
+
+// 获取k线图数据
+export function getKline(data) {
+  return request({
+    url: '/app/cryptoData/kline',
+    method: 'get',
+    params: data
+  })
+}

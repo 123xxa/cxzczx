@@ -63,16 +63,18 @@ function init() {
             if (event.data.includes('UPDATE_PRICE')) {
                 let obj = JSON.parse(event.data)
                 let content = JSON.parse(obj.content)
-                let coinMainList = store.state.coinMainList
+                let coinMainList = JSON.parse(JSON.stringify(store.state.coinMainList))
                 let index = coinMainList.findIndex(item => item.cryptoId === content.cryptoId)
                 if (index == -1) {
                     coinMainList.push(content)
                 } else {
+                    // console.log('原s', coinMainList[index].cryptoId, coinMainList[index].volumeChange24h, coinMainList[index].price, coinMainList[index].percentChange24h)
                     coinMainList[index] = {
                         ...coinMainList[index],
                         ...content,
-                        timestamp: new Date().getTime()
+                        // timestamp: new Date().getTime()
                     }
+                    // console.log('替s', coinMainList[index].cryptoId, coinMainList[index].volumeChange24h, coinMainList[index].price, coinMainList[index].percentChange24h)
                 }
                 store.commit('changeCoinMainList', coinMainList)
             } else {

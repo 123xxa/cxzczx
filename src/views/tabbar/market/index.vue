@@ -56,10 +56,15 @@
       coinMainList: {
         handler(newVal, oldVal) {
           let arr = newVal || []
-          if (this.list && this.list.length > 0 && arr && arr.length > 0) {
+          if (this.list && this.list.length > 0 && arr && arr.length > 0 && JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
             arr.map(item => {
               let index = this.list.findIndex(o => o.cryptoId == item.cryptoId)
               if (index !== -1) {
+                // if (item.volumeChange24h != this.list[index].volumeChange24h || item.percentChange24h != this.list[index].percentChange24h || item.price != this.list[index].price) {
+                //   let obj = this.list[index]
+                //   console.log('原', obj.cryptoId, obj.price, obj.percentChange24h, obj.volumeChange24h)
+                //   console.log('替', item.cryptoId, item.price, item.percentChange24h, item.volumeChange24h)
+                // }
                 this.list[index].volumeChange24h = item.volumeChange24h
                 this.list[index].price = item.price
                 this.list[index].percentChange24h = item.percentChange24h
@@ -67,6 +72,7 @@
               return item
             })
           }
+          this.$forceUpdate()
         },
         immediate: true
       }

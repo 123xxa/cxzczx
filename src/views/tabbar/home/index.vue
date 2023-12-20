@@ -100,7 +100,7 @@ export default {
     coinMainList: {
       handler(newVal, oldVal) {
         let arr = newVal || []
-        if (this.proportionList && this.proportionList.length > 0 && arr && arr.length > 0) {
+        if (this.proportionList && this.proportionList.length > 0 && arr && arr.length > 0 && JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
           arr.map(item => {
             let index = this.proportionList.findIndex(o => o.cryptoId == item.cryptoId)
             if (index !== -1) {
@@ -111,6 +111,7 @@ export default {
             return item
           })
         }
+        this.$forceUpdate()
       },
       immediate: true
     }

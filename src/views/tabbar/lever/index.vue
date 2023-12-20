@@ -33,9 +33,9 @@
 
     <div class="time-list">
       <div
-        :class="['time-list-item', timeType == i.value ? 'time-list-item-active' : '']"
+        :class="['time-list-item', timeType == k ? 'time-list-item-active' : '']"
         v-for="(i, k) in timeList"
-        @click="timeType = i.value"
+        @click="changeChart(k)"
         :key="k"
       >{{ i.title }}</div>
     </div>
@@ -81,10 +81,11 @@
       <div class="btn btn2" @click="openVan(1)">{{ $t('text44') }}</div>
     </div>
     <div class="record-tab">
-      <div class="record-tab record-tab-active">{{ $t('text45') }}</div>
-      <div class="record-tab">{{ $t('text46') }}</div>
+      <div class="record-tab" :class="{'record-tab-active': orderIndex == 0}" @click="changeMenu(0)">{{ $t('text45') }}</div>
+      <div class="record-tab" :class="{'record-tab-active': orderIndex == 1}" @click="changeMenu(1)">{{ $t('text46') }}</div>
     </div>
-    <empty/>
+    <OrderList :list="orderList" v-if="orderList && orderList.length !== 0" />
+    <empty v-else />
     <list :show.sync="show" :list="list" :index="listIndex" @changeIndex="changeIndex" />
     <van-overlay :show="confirmShow" z-index="9999">
       <div class="confirm-box" v-if="prodList && prodList.length !== 0">
@@ -121,10 +122,11 @@
 import { Data2 } from "./test.js";
 import TradingVue from "trading-vue-js";
 import list from "./list.vue";
+import OrderList from "./orderList.vue";
 import {mapGetters,mapActions} from "vuex"
-import { getProfitRatesList, postOrder, getLastPrice } from '@/api/home.js'
+import { getProfitRatesList, postOrder, getLastPrice, getOrderList, getKline } from '@/api/home.js'
 export default {
-  components: { TradingVue, list },
+  components: { TradingVue, list, OrderList },
   computed:{
     ...mapGetters(['getSwitchChecked', 'coinMainList', 'userInfo', 'token'])
   },
@@ -132,17 +134,18 @@ export default {
     coinMainList: {
       handler(newVal, oldVal) {
         let arr = newVal || []
-        if (this.proportionList && this.proportionList.length > 0 && arr && arr.length > 0) {
+        if (this.list && this.list.length > 0 && arr && arr.length > 0 && JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
           arr.map(item => {
-            let index = this.proportionList.findIndex(o => o.cryptoId == item.cryptoId)
+            let index = this.list.findIndex(o => o.cryptoId == item.cryptoId)
             if (index !== -1) {
-              this.proportionList[index].volumeChange24h = item.volumeChange24h
-              this.proportionList[index].price = item.price
-              this.proportionList[index].percentChange24h = item.percentChange24h
+              this.list[index].volumeChange24h = item.volumeChange24h
+              this.list[index].price = item.price
+              this.list[index].percentChange24h = item.percentChange24h
             }
             return item
           })
         }
+        this.$forceUpdate()
       },
       immediate: true
     }
@@ -153,9 +156,9 @@ export default {
       prodList:[],
       show:false,
       width: 0,
-      chartData: Data2,
-      value1:"",
-      timeType: 1,
+      // chartData: Data2,
+      chartData: {},
+      timeType: 0,
       timeList: [
         {
           title: "Time",
@@ -195,12 +198,16 @@ export default {
       confirmShow: false,
       list: [],
       listIndex: 0,
+      // 订单列表
+      orderIndex: 0,
+      orderList: [],
     };
   },
   created() {
     this.width = document.documentElement.clientWidth;
     this.getRatesList()
     this.getList()
+    this.getOrder()
   },
   methods: {
     ...mapActions(['setUserInfo']),
@@ -237,6 +244,7 @@ export default {
       const res = await getLastPrice()
       if (res.code == 200) {
         this.list = res.data || []
+        this.getChartsData()
       }
     },
     async getRatesList() {
@@ -256,6 +264,38 @@ export default {
         this.$toast(this.$t('text243'))
         this.confirmShow = false
         this.setUserInfo()
+        this.getOrder()
+      }
+    },
+    changeMenu(index) {
+      if (this.orderIndex == index) return
+      this.orderIndex = index
+      this.getOrder()
+    },
+    async getOrder() {
+      if (!this.token) return
+      const res = await getOrderList({
+        status: this.orderIndex
+      })
+      if (res.code == 200) {
+        this.orderList = res.rows || []
+      }
+    },
+    changeChart(index) {
+      if (this.timeType == index) return
+      this.timeType = index
+      this.getChartsData()
+    },
+    async getChartsData() {
+      if (!(this.list && this.list.length > 0)) return
+      const res = await getKline({
+        period: this.timeList[this.timeType].title,
+        currency_match_id: this.list[this.listIndex].cryptoId
+      })
+      if (res.code == 200) {
+        this.chartData = {
+          ohlcv: res.data || []
+        }
       }
     }
   },
