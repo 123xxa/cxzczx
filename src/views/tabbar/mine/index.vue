@@ -64,7 +64,7 @@
     </div>
     <div class="title">{{ $t('text55') }}</div>
     <div class="box">
-        <div class="item">
+        <div class="item" @click="toWhite()">
             <div class="item-left">{{ $t('text63') }}</div>
             <van-icon name="arrow" color="#A5A8AC" size="19"/>
         </div>
@@ -106,6 +106,9 @@ export default {
     methods: {
         ...mapActions(['setSwitchChecked', 'setUserInfo']),
         ...mapMutations(['removeUserInfo']),
+        toWhite() {
+            window.open(`${window.location.origin + '/QCM.pdf'}`, "_blank");
+        },
         toOther(path) {
             if (this.token) {
                 this.$router.push(path)
