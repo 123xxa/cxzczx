@@ -147,7 +147,8 @@ export default {
         }
         this.$forceUpdate()
       },
-      immediate: true
+      immediate: true,
+      deep: true
     }
   },
   data() {
