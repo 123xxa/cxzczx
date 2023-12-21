@@ -101,6 +101,11 @@ const routes = [
     path:"/resetLogin",
     name:"resetLogin",
     component:()=>import(/* webpackChunkName: "home" */ '@/views/security/resetLogin.vue')
+  },
+  {
+    path:"/userAgreement",
+    name:"userAgreement",
+    component:()=>import(/* webpackChunkName: "home" */ '@/views/userAgreement/index.vue')
   }
 ]
 

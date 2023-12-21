@@ -41,7 +41,7 @@
         <div style="margin-top: 20px;">
             <van-checkbox v-model="checked" shape="square">
                 <span style="color: var(--color);">{{ $t('text79') }}</span>
-                <span style="color:#1881D2">《{{ $t('text80') }}》</span>
+                <span style="color:#1881D2" @click.stop="$router.push('/userAgreement')">《{{ $t('text80') }}》</span>
             </van-checkbox>
         </div>
         <div class="button2" style="margin-top: 45px;color" @click="submit">{{ $t('text69') }}</div>
