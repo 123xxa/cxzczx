@@ -17,3 +17,12 @@ export function applyWithdraw(data) {
     data: data
   })
 }
+
+// 提现记录
+export function withdrawRecordList(data) {
+  return request({
+    url: '/app/withdrawRecord/list',
+    method: 'get',
+    params: data
+  })
+}

@@ -11,7 +11,7 @@
     <div class="middle-part">
       <div class="part-box">
         <div class="m-title">{{ `${list[listIndex].label} ${$t('text228')}` }}</div>
-        <div class="m-tip">{{ $t('text223') }} 0 {{ list[listIndex].label }}</div>
+        <div class="m-tip">{{ $t('text223') }} {{ userInfo && userInfo.usdt || 0 }} {{ list[listIndex].label }}</div>
         <div class="chain-type">
           <div class="chain-title">{{ $t('text231') }}</div>
           <div class="type-box">
@@ -32,9 +32,9 @@
         <div class="n-box">
           <div class="n-title">{{ $t('text225') }}</div>
           <div class="input-box">
-            <van-field v-model="number" type="number" class="input" :placeholder="$t('text237')" />
+            <van-field v-model="amount" type="number" class="input" :placeholder="$t('text237')" />
             <div class="unit">{{ list[listIndex].label }}</div>
-            <div class="all">{{ $t('text222') }}</div>
+            <div class="all" @click="amount = (userInfo && userInfo.usdt || 0)">{{ $t('text222') }}</div>
           </div>
         </div>
         <!-- <div class="n-box">
@@ -46,20 +46,46 @@
         <div class="n-box">
           <div class="n-title">
             <div class="left">{{ $t('text234') }}</div>
-            <div>{{ list[listIndex].label }}</div>
+            <div>{{ amount ? Number(amount || 0) - Number(handlingFee || 0) : '' }} {{ list[listIndex].label }}</div>
           </div>
         </div>
         <div class="n-box">
-          <div class="n-tip">Handling fee：{{handlingFee}} {{ list[listIndex].label }}</div>
+          <div class="n-tip">{{ $t('text21') }}：{{handlingFee}} {{ list[listIndex].label }}</div>
         </div>
-        <div class="yellow-btn">{{ $t('text229') }}</div>
+        <div class="yellow-btn" @click="submit">{{ $t('text229') }}</div>
       </div>
     </div>
     <div class="bottom-part">
       <div class="b-title">{{ $t('text230') }}</div>
       <div class="list-box" v-if="recordList && recordList.length !== 0">
-    <!-- 提现记录
-时间，数额，提币地址，状态（审核中，通过/不通过） -->
+        <div class="list-item" v-for="item in recordList" :key="item.withdrawRecordId">
+          <div class="item-flex">
+            <div class="item">
+              <div>{{ item.chinType ? `${item.chinType == 1 ? 'USDT-TRC20' : 'USDT-ERC20'}` : list[listIndex].label }}</div>
+              <div class="break">{{ item.address ||'' }}</div>
+            </div>
+            <div class="item">
+              <div>{{ $t('text225') }}</div>
+              <div>{{ item.amount || 0 }}</div>
+            </div>
+            <div class="item">
+              <div>{{ $t('text21') }}</div>
+              <div>{{ item.handlingFee ||0 }}</div>
+            </div>
+            <div class="item">
+              <div>{{ $t('text227') }}</div>
+              <div>{{ item.createTime || '' }}</div>
+            </div>
+            <div class="item">
+              <div>{{ $t('text266') }}</div>
+              <div>{{ [$t('text267'), $t('text268'), $t('text269')][item.withdrawStatus || 0] }}</div>
+            </div>
+            <div class="item" v-if="item.withdrawStatus == 2">
+              <div>{{ $t('text270') }}</div>
+              <div class="break">{{ item.failReason || '' }}</div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="empty-box" v-else>
         <img src="@/assets/images/lever/anonymous.png" alt="" class="empty-img" />
@@ -70,35 +96,42 @@
 </template>
 
 <script>
-import { getHandlingFee } from "@/api/withdrawal.js";
+import {mapGetters,mapActions} from "vuex"
+import { getHandlingFee, applyWithdraw, withdrawRecordList } from "@/api/withdrawal.js";
 export default {
   data() {
     return {
       address: '',
-      number: '',
+      amount: '',
       password: '',
       typeList: [
         {
           label: 'ERC20',
-          value: 0
+          value: 2
         },
         {
           label: 'TRC20',
           value: 1
         },
       ],
-      typeIndex: 0,
+      typeIndex: 2,
       listIndex: 0,
+      handlingFee: 0,
       recordList: [],
-      handlingFee: 5
+      total: 0,
+      pageSize: 20,
+      pageNum: 1,
+      loading: false
     };
   },
   computed: {
+    ...mapGetters(['userInfo']),
     list() {
       return this.$store.state.coinList
     }
   },
   methods: {
+    ...mapActions(['setUserInfo']),
     to(e) {
       window.open(e, "_blank");
     },
@@ -111,20 +144,83 @@ export default {
       if (res.code === 200) {
         this.handlingFee = parseFloat(res.data)
       }
-    }
+    },
+    async submit() {
+      if (!this.address) return this.$toast(this.$t('text235'))
+      if (!this.amount) return this.$toast(this.$t('text264'))
+      if (this.amount < 10) return this.$toast(this.$t('text237'))
+      if (this.amount > (this.userInfo && this.userInfo.usdt || 0)) return this.$toast(this.$t('text265'))
+      const res = await applyWithdraw({
+        address: this.address,
+        amount: this.amount,
+        chinType: this.typeIndex,
+        refType: 2
+      })
+      if (res.code == 200) {
+        this.pageNum = 1
+        this.getList()
+        this.$toast(this.$t('text240'))
+      }
+    },
+    getList() {
+      this.loading = true
+      withdrawRecordList({
+        pageSize: this.pageSize,
+        pageNum: this.pageNum
+      }).then(res => {
+        this.total = res.total
+        let arr = res.rows || []
+        this.recordList = this.pageNum === 1 ? arr : [...this.recordList, ...arr]
+        this.loading = false
+      }).catch(err => {
+        this.loading = false
+      })
+    },
+    
+    // 添加页面触底判断
+		getbottom(){
+			// 返回滚动条垂直滚动距离
+			let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+			// 返回该元素的像素高度，高度包含内边距（padding），不包含边框（border），外边距（margin）和滚动条
+			let clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+			// 返回该元素的像素高度，高度包含内边距（padding），不包含外边距（margin）、边框（border）
+			let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+			let numHeight = scrollTop + clientHeight;
+			// 触底了
+			if (scrollHeight > clientHeight && numHeight > scrollHeight - 1) {
+				// 还在加载上一次数据 直接返回
+				if(this.loading) return
+				return this.countPage()
+			}
+		},
+		// 触底判断是否加载
+		countPage(){
+			// 判断是否已经加载全部
+			if(this.recordList.length < this.total){
+				this.pageNum++
+				this.getList()
+			}
+		},
   },
   mounted () {
     this.getHandlingFee()
-  }
+    this.getList()
+    window.addEventListener("scroll", this.getbottom);
+  },
+  destroyed() {
+		window.removeEventListener("scroll", this.getbottom);
+	},
 };
 </script>
 
 <style lang="scss" scoped>
 ::v-deep .van-nav-bar {
-  background: var(--bg-color);
+  background: var(--box-bg-color);
 }
 
 .content {
+  background: var(--box-bg-color);
+  min-height: 100vh;
   color: var(--color);
 
   .title {
@@ -269,6 +365,38 @@ export default {
         font-size: 13px;
         &:last-child {
           text-align: right;
+        }
+      }
+    }
+
+    .list-box {
+      width: 100%;
+      color: var(--color);
+      .list-item {
+        width: 100%;
+        border-bottom: 1px solid #1f2937;
+        height: fit-content;
+        padding: 22px 10px 15px;
+        box-sizing: border-box;
+        .break {
+          text-align: right;
+          max-width: 50%;
+          word-wrap: break-word;
+          white-space: pre-line;
+          word-break: break-all;
+        }
+        .item-flex {
+            width: 100%;
+            font-size: 13px;
+            .item {
+              width: 100%;
+              display: flex;
+              justify-content: space-between;
+              margin-top: 10px;
+              &:first-child {
+                margin-top: 0px;
+              }
+            }
         }
       }
     }
