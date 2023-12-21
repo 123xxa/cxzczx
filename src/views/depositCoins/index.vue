@@ -143,7 +143,7 @@ export default {
         address: this.account,
         amount: this.amount,
         certificateImage: this.imgPath,
-        chainType: this.chainType,
+        chinType: this.chainType,
         tokenType: 2
       })
       if (res.code == 200) {

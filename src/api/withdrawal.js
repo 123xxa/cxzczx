@@ -8,3 +8,12 @@ export function getHandlingFee() {
     method: 'get'
   })
 }
+
+// 提现
+export function applyWithdraw(data) {
+  return request({
+    url: '/app/withdrawRecord/applyWithdraw',
+    method: 'post',
+    data: data
+  })
+}
