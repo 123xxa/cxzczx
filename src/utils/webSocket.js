@@ -24,33 +24,32 @@ function createWebSocket(info) {
         ws = new WebSocket(wsUrl);
         init();
     } catch (e) {
-        console.log('catch' + e);
+        // console.log('catch' + e);
         reconnect();
     }
 }
 
 function init() {
     ws.onclose = function (e) {
-        console.log('链接关闭' + e.code + new Date().getTime());
+        // console.log('链接关闭' + e.code + new Date().getTime());
         // 服务器关闭  不重连
         // if (e.code != 1006) {
         reconnect();
         // }
     };
     ws.onerror = function (e) {
-        console.log('发生异常了' + new Date().getTime());
+        // console.log('发生异常了' + new Date().getTime());
         reconnect();
     };
     ws.onopen = function (e) {
-        console.log(router, 'scscsd')
-        console.log('连接成功' + new Date().getTime());
+        // console.log('连接成功' + new Date().getTime());
         let obj = {
             type: 'JOIN',
             content: '',
             sender: normalId,
             timestamp: new Date().getTime()
         }
-        console.log(obj)
+        // console.log(obj)
         ws.send(JSON.stringify(obj));
         heartSendMsg = setInterval(() => {
             // console.log(`HEART_SEND_MSG ${new Date().getTime()}`)
@@ -78,14 +77,14 @@ function init() {
                 }
                 store.commit('changeCoinMainList', coinMainList)
             } else {
-                console.log('接收到来自服务器的消息：', event, new Date().getTime());
+                // console.log('接收到来自服务器的消息：', event, new Date().getTime());
             }
         }
     }
 }
 
 function reconnect() {
-    console.log('重连中......')
+    // console.log('重连中......')
     if (lockReconnect) {
         return;
     };

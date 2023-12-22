@@ -140,7 +140,7 @@ export default {
     },
     async getHandlingFee () {
       const res = await getHandlingFee()
-      console.log(res)
+      // console.log(res)
       if (res.code === 200) {
         this.handlingFee = parseFloat(res.data)
       }
