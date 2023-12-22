@@ -40,6 +40,7 @@
       >{{ i.title }}</div>
     </div>
     <trading-vue
+      ref="tradingVue"
       :data="chartData"
       :width="width"
       :height="316"
@@ -48,7 +49,6 @@
       :colorText="getSwitchChecked?'#FFFFFF':'#000000'"
       :toolbar="false"
       class="trading-vue"
-      :chart-config="{TB_ICON_BRI: 1}"
     ></trading-vue>
 
     <div class="list" v-if="prodList && prodList.length !== 0">
@@ -119,12 +119,11 @@
 </template>
 
 <script>
-import { Data2 } from "./test.js";
 import TradingVue from "trading-vue-js";
 import list from "./list.vue";
 import OrderList from "./orderList.vue";
 import {mapGetters,mapActions} from "vuex"
-import { getProfitRatesList, postOrder, getLastPrice, getOrderList, getKline } from '@/api/home.js'
+import { getProfitRatesList, postOrder, getLastPrice, getOrderList, getKlines } from '@/api/home.js'
 export default {
   components: { TradingVue, list, OrderList },
   computed:{
@@ -153,6 +152,7 @@ export default {
   },
   data() {
     return {
+      updateSwitch: false,
       prodIndex:0,
       prodList:[],
       show:false,
@@ -162,36 +162,32 @@ export default {
       timeType: 0,
       timeList: [
         {
-          title: "Time",
+          title: "1m",
           value: 1
         },
         {
-          title: "1min",
+          title: "3m",
           value: 2
         },
         {
-          title: "5min",
+          title: "30m",
           value: 3
         },
         {
-          title: "30min",
+          title: "1h",
           value: 4
         },
         {
-          title: "1hour",
+          title: "2h",
           value: 5
         },
         {
-          title: "1day",
+          title: "4h",
           value: 6
         },
         {
-          title: "1week",
+          title: "1d",
           value: 7
-        },
-        {
-          title: "1mon",
-          value: 8
         }
       ],
       amount: '',
@@ -209,6 +205,7 @@ export default {
     this.getRatesList()
     this.getList()
     this.getOrder()
+    this.updateLine()
   },
   methods: {
     ...mapActions(['setUserInfo']),
@@ -236,6 +233,8 @@ export default {
     },
     changeIndex(index) {
       this.listIndex = index
+      console.log("change crypto coin index: ", index)
+      this.getList()
     },
     openVan(type) {
       this.payDropRise = type
@@ -289,15 +288,42 @@ export default {
     },
     async getChartsData() {
       if (!(this.list && this.list.length > 0)) return
-      const res = await getKline({
-        period: this.timeList[this.timeType].title,
-        currency_match_id: this.list[this.listIndex].cryptoId
+      // const res = await getKline({
+      //   // period: this.timeList[this.timeType].title,
+      //   period: "1min",
+      //   // currency_match_id: this.list[this.listIndex].cryptoId,
+      //   currency_match_id: 1,
+      //   sizeNumber: 20
+      // })
+      console.log(this.timeList, this.timeType)
+      this.updateSwitch = true
+      const res = await getKlines({
+        symbol: this.list[this.listIndex].symbol + "USDT",
+        interval: this.timeList[this.timeType].title, // "1m",
+        limit: 200
       })
       if (res.code == 200) {
-        this.chartData = {
-          ohlcv: res.data || []
-        }
+        const ohlcv = res.data.map((item) => {
+          return [
+            parseInt(item[0]),
+            parseFloat(item[1]),
+            parseFloat(item[2]),
+            parseFloat(item[3]),
+            parseFloat(item[4]),
+            parseFloat(item[5]),
+          ]
+        })
+        this.chartData = { ohlcv }
+        this.$refs.tradingVue.resetChart()
+        this.updateSwitch = false
       }
+    },
+    updateLine () {
+      setInterval(() => {
+        if (!this.updateSwitch) {
+          this.getChartsData()
+        }
+      }, 2000)
     }
   },
 };

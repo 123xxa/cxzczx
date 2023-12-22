@@ -42,3 +42,12 @@ export function getKline(data) {
     params: data
   })
 }
+
+// 获取k线图数据
+export function getKlines(data) {
+  return request({
+    url: '/app/cryptoData/klines',
+    method: 'get',
+    params: data
+  })
+}
