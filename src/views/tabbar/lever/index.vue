@@ -24,8 +24,10 @@
           <!-- <div>{{ $t('text37') }}</div> -->
         </div>
         <div>
-          <div>{{ Number(Number(list && list.length !== 0 ? list[listIndex].maxPrice : 0).toFixed(8)) }}</div>
-          <div>{{ Number(Number(list && list.length !== 0 ? list[listIndex].minPrice : 0).toFixed(8)) }}</div>
+          <!-- <div class="value-high">{{ Number(Number(list && list.length !== 0 ? list[listIndex].maxPrice : 0).toFixed(8)) }}</div>
+          <div class="value-low">{{ Number(Number(list && list.length !== 0 ? list[listIndex].minPrice : 0).toFixed(8)) }}</div> -->
+          <div class="value-high">{{currentHigh}}</div>
+          <div class="value-low">{{currentLow}}</div>
           <!-- <div>{{ Number(Number(list && list.length !== 0 ? list[listIndex].price : 0).toFixed(8)) }}</div> -->
         </div>
       </div>
@@ -198,6 +200,8 @@ export default {
       // 订单列表
       orderIndex: 0,
       orderList: [],
+      currentHigh: '',
+      currentLow: ''
     };
   },
   created() {
@@ -233,7 +237,6 @@ export default {
     },
     changeIndex(index) {
       this.listIndex = index
-      console.log("change crypto coin index: ", index)
       this.getList()
     },
     openVan(type) {
@@ -295,7 +298,6 @@ export default {
       //   currency_match_id: 1,
       //   sizeNumber: 20
       // })
-      console.log(this.timeList, this.timeType)
       this.updateSwitch = true
       const res = await getKlines({
         symbol: this.list[this.listIndex].symbol + "USDT",
@@ -304,6 +306,7 @@ export default {
       })
       if (res.code == 200) {
         const ohlcv = res.data.map((item) => {
+          // [timestamp, open, high, low, close, volume]
           return [
             parseInt(item[0]),
             parseFloat(item[1]),
@@ -313,6 +316,10 @@ export default {
             parseFloat(item[5]),
           ]
         })
+
+        this.currentHigh = ohlcv[ohlcv.length - 1][2]
+        this.currentLow = ohlcv[ohlcv.length - 1][3]
+
         this.chartData = { ohlcv }
         this.$refs.tradingVue.resetChart()
         this.updateSwitch = false
@@ -400,7 +407,7 @@ export default {
     min-width: 100px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     font-size: 12px;
     color: var(--color);
   }
@@ -422,16 +429,16 @@ export default {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  // justify-content: space-around;
+  /* justify-content: center; */
   align-items: center;
   padding: 0 15px;
   box-sizing: border-box;
  .list-item{
-    width: 80px;
+    width: 24%;
     background: #EEEEEE;
     border-radius: 10px;
     padding: 8px 10px;
-    margin: 0 10px 10px 0 ;
+    margin:  10px 10px 0 0 ;
     text-align: center;
     color: #4B5563;
     position: relative;
