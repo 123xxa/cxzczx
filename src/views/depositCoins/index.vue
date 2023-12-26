@@ -148,6 +148,7 @@ export default {
       })
       if (res.code == 200) {
         this.$toast(this.$t('text240'))
+        this.$router.replace('/mine')
       }
     }
   }

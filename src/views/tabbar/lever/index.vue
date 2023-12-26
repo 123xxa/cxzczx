@@ -162,7 +162,7 @@
         />
       </van-popup>
     </div>
-    <van-overlay :show="confirmShow" z-index="9999">
+    <van-overlay :show="confirmShow" z-index="1001">
       <div class="confirm-box" v-if="prodList && prodList.length !== 0">
         <div class="confirm-title">{{ $t('text241') }}
           <van-icon name="cross" class="close" color="#000000" size="18" @click="confirmShow = false" />
