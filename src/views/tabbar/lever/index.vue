@@ -134,6 +134,8 @@
       <van-popup v-model="selectSellShow" position="bottom">
         <van-picker
           show-toolbar
+          :confirm-button-text="$t('text94')"
+          :cancel-button-text="$t('text95')"
           :columns="selectSellList"
           @confirm="onConfirmSell"
           @cancel="selectSellShow = false"
@@ -142,6 +144,8 @@
       <van-popup v-model="numOneShow" position="bottom">
         <van-picker
           show-toolbar
+          :confirm-button-text="$t('text94')"
+          :cancel-button-text="$t('text95')"
           :columns="numOneList"
           @confirm="onConfirmOne"
           @cancel="numOneShow = false"
@@ -150,6 +154,8 @@
       <van-popup v-model="numTwoShow" position="bottom">
         <van-picker
           show-toolbar
+          :confirm-button-text="$t('text94')"
+          :cancel-button-text="$t('text95')"
           :columns="numTwoList"
           @confirm="onConfirmTwo"
           @cancel="numTwoShow = false"
