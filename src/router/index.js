@@ -106,6 +106,11 @@ const routes = [
     path:"/userAgreement",
     name:"userAgreement",
     component:()=>import(/* webpackChunkName: "home" */ '@/views/userAgreement/index.vue')
+  },
+  {
+    path:"/identityVerification",
+    name:"identityVerification",
+    component:()=>import(/* webpackChunkName: "home" */ '@/views/verification/index.vue')
   }
 ]
 

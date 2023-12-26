@@ -45,3 +45,12 @@ export function getBalanceLog(data) {
     params: data
   })
 }
+
+// 实名认证审核
+export function putCertification(data) {
+  return request({
+    url: '/app/wallet/certification',
+    method: 'put',
+    data: data
+  })
+}

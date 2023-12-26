@@ -4,7 +4,7 @@
       <div class="top-box ">
         <div class="top-box-l">
           <div>{{ token ? (userInfo && userInfo.nickname ? userInfo.nickname : '--') : $t('text47') }}</div>
-          <div style="white-space: nowrap;">{{ token ? (userInfo && userInfo.id ? `UID：${userInfo.id}` : '--') : $t('text48') }}</div>
+          <div style="white-space: nowrap;">{{ token ? (userInfo && userInfo.id ? `UID：${userInfo.userUuid}` : '--') : $t('text48') }}</div>
         </div>
         <!-- <div class="top-box-m">
           <div>--</div>
@@ -57,6 +57,11 @@
             <div class="item-left">{{ $t('text61') }}</div>
             <van-icon name="arrow" color="#A5A8AC" size="19"/>
         </div>
+
+        <div class="item" @click="toOther('/identityVerification')">
+            <div class="item-left">Identity Verification</div>
+            <van-icon name="arrow" color="#A5A8AC" size="19"/>
+        </div>
         <!-- <div class="item">
             <div class="item-left">{{ $t('text62') }}</div>
             <van-icon name="arrow" color="#A5A8AC" size="19"/>
@@ -72,10 +77,10 @@
             <div class="item-left">{{ $t('text64') }}</div>
             <van-icon name="arrow" color="#A5A8AC" size="19"/>
         </div> -->
-        <div class="item">
+        <!-- <div class="item">
             <div class="item-left">{{ $t('text65') }}</div>
             <van-switch v-model="switchChecked" size="20"  @change="changeMode" />
-        </div>
+        </div> -->
     </div>
     <div style="height: 40px;"></div>
   </div>
