@@ -101,6 +101,18 @@ export default {
     text100:"abnormal",
     text101:"System interfaces",
 
+    text102:"Identity Verification",
+    text103:"Complete Identity Verification to access services",
+    text104:"Driver's License",
+    text105:"ID Card",
+    text106:"Passport",
+    text107:"Residence Permit",
+    text108:"Requirements",
+    text109:"Use your valid government-issued identification document for verification",
+    text110:"Front",
+    text111:"Back",
+    text112:"submit",
+
     text200:"Deposit coins",
     text201:"Currency address",
     text202:"copy address",

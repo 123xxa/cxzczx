@@ -2,41 +2,41 @@
     <div class="content">
         <van-nav-bar class="my-nav-bar" :border="false" left-text fixed placeholder>
             <template #title>
-                <div class="title">Identity Verification</div>
+                <div class="title">{{ $t('text102') }}</div>
             </template>
             <template #left>
                 <van-icon @click="goback" name="arrow-left" color="var(--color)" size="20" />
             </template>
         </van-nav-bar>
         <div class="top">
-            <div class="title">Identity Verification</div>
-            <div style="color: #81858c; font-size: 14px;">Complete Identity Verification to access services.</div>
+            <div class="title">{{ $t('text102') }}</div>
+            <div style="color: #81858c; font-size: 14px;">{{ $t('text103') }}.</div>
         </div>
         <div class="type">
             <div class="type-item">
                 <div class="type-img"><img src="@/assets/images/mine/v-i-1.svg"></div>
-                Driver's License
+                {{ $t('text104') }}
             </div>
             <div class="type-item">
                 <div class="type-img"><img src="@/assets/images/mine/v-i-2.svg"></div>
-                ID Card
+                {{ $t('text105') }}
             </div>
             <div class="type-item">
                 <div class="type-img"><img src="@/assets/images/mine/v-i-3.svg"></div>
-                Passport
+                {{ $t('text106') }}
             </div>
             <div class="type-item">
                 <div class="type-img"><img src="@/assets/images/mine/v-i-4.svg"></div>
-                Residence Permit
+                {{ $t('text107') }}
             </div>
         </div>
         <div class="requirements">
-            <div class="requirements-title">Requirements</div>
-            <div class="requirements-item">Use your valid government-issued identification document for verification.</div>
+            <div class="requirements-title">{{ $t('text108') }}</div>
+            <div class="requirements-item">{{ $t('text109') }}.</div>
         </div>
         <div class="upload">
             <div class="upload-item">
-                <div class="upload-title">Front</div>
+                <div class="upload-title">{{ $t('text110') }}</div>
                 <div class="upload-wrapper">
                     <van-uploader :after-read="afterReadFont">
                         <img :src="imgPathFont" alt="" v-if="imgPathFont" class="upload-img">
@@ -45,7 +45,7 @@
                 </div>
             </div>
             <div class="upload-item">
-                <div class="upload-title">Back</div>
+                <div class="upload-title">{{ $t('text111') }}</div>
                 <div class="upload-wrapper">
                     <van-uploader :after-read="afterReadBack">
                         <img :src="imgPathBack" alt="" v-if="imgPathBack" class="upload-img">
@@ -54,7 +54,7 @@
                 </div>
             </div>
         </div>
-        <div class="yellow-btn" @click="submit">submit</div>
+        <div class="yellow-btn" @click="submit">{{ $t('text112') }}</div>
     </div>
 </template>
   

@@ -59,7 +59,7 @@
         </div>
 
         <div class="item" @click="toOther('/identityVerification')">
-            <div class="item-left">Identity Verification</div>
+            <div class="item-left">{{ $t('text102') }}</div>
             <van-icon name="arrow" color="#A5A8AC" size="19"/>
         </div>
         <!-- <div class="item">
