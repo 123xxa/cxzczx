@@ -6,13 +6,14 @@
           <div>{{ token ? (userInfo && userInfo.nickname ? userInfo.nickname : '--') : $t('text47') }}</div>
           <div style="white-space: nowrap;">{{ token ? (userInfo && userInfo.id ? `UID：${userInfo.userUuid}` : '--') : $t('text48') }}</div>
         </div>
-        <!-- <div class="top-box-m">
-          <div>--</div>
-          <div>{{ $t('text49') }}:</div>
-        </div> -->
-        <div class="top-box-r" v-if="token" @click="submit()">{{ $t('text50') }}</div>
-        <div class="top-box-r" v-else @click="$router.push('/login')">{{ $t('text83') }}</div>
-        
+        <div class="top-box-m" v-if="userInfo && userInfo.nickname">
+          <div>LV:{{ userInfo && userInfo.nickname ? userInfo.level : '-' }}</div>
+          <div v-if="userInfo.realNameState == 1">KYC:Finish</div>
+          <div v-else-if="userInfo.realNameState == 0">KYC:Reviewing</div>
+          <div v-else>KYC:Unsubmitted</div>
+        </div>
+        <!-- <div class="top-box-r" v-if="token" @click="submit()">{{ $t('text50') }}</div>
+        <div class="top-box-r" v-else @click="$router.push('/login')">{{ $t('text83') }}</div> -->
       </div>
       
       <div class="top-info">
