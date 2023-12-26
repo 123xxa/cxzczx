@@ -111,6 +111,30 @@ export default new Vuex.Store({
       {
         logo: require('@/assets/images/withdrawCoins/25.png'),
         label: 'DOGE'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/IMX.png'),
+        label: 'IMX'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/OP.png'),
+        label: 'OP'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/SHIB.png'),
+        label: 'SHIB'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/SOL.png'),
+        label: 'SOL'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/XRP.png'),
+        label: 'XRP'
+      },
+      {
+        logo: require('@/assets/images/withdrawCoins/ARB.png'),
+        label: 'ARB'
       }
     ]
   },
