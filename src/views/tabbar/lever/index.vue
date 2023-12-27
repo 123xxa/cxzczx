@@ -51,7 +51,7 @@
     <div v-show="menuItem == 0">
       <div class="list" v-if="prodList && prodList.length !== 0">
         <div class="list-item" v-for="(i, k) in prodList" :key="k" @click="prodIndex = k">
-          <div>{{ i.profitRatesTime }} {{ $t('text38') }}</div>
+          <div>{{ formatMyTime(i.profitRatesTime) }}</div>
           <div class="list-item-text">{{ $t('text39') }}{{ Number(Number((i.profitRates || 0) * 100).toFixed(2)) }}%</div>
           <img src="@/assets/images/lever/icon.png" class="list-icon" alt="" v-if="prodIndex == k">
         </div>
@@ -325,6 +325,15 @@ export default {
   },
   methods: {
     ...mapActions(['setUserInfo']),
+    formatMyTime(e) {
+      if (!e || isNaN(e)) return ''
+      let num = Number(e)
+      if (num < 60) {
+        return `${num} ${this.$t('text38')}`
+      } else {
+        return `${parseInt(num / 60)} ${this.$t('text113')}`
+      }
+    },
     submitOther() {
       if (!this.numPrice) return this.$toast(this.$t('text283'))
       if (!this.numNum || this.numNum == 0) return this.$toast(this.$t('text282'))

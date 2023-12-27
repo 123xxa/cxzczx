@@ -114,6 +114,7 @@ export default {
     text110:"Ön",
     text111:"Geri",
     text112:"Gönder",
+    text113:"dakika",
 
     text200:"Para yatırın",
     text201:"Para birimi adresi",

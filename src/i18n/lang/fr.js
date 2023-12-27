@@ -111,6 +111,7 @@ export default {
     "text110": "Le Front",
     "text111": "Retour",
     "text112": "Soumettre",
+    "text113": "minute",
     "text200": "Pièces de dépôt",
     "text201": "Adresse monétaire",
     "text202": "Adresse de la copie",

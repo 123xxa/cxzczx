@@ -111,6 +111,7 @@ export default {
     "text110": "Anteriore",
     "text111": "Indietro",
     "text112": "presentare",
+    "text113": "minuta",
     "text200": "Depositare monete",
     "text201": "Indirizzo valuta",
     "text202": "copia indirizzo",

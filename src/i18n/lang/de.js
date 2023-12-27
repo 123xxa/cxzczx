@@ -111,6 +111,7 @@ export default {
     "text110": "Vorne",
     "text111": "Zurück",
     "text112": "einreichen",
+    "text113": "Minute",
     "text200": "Münzen einzahlen",
     "text201": "Währungsadresse",
     "text202": "Adresse kopieren",
