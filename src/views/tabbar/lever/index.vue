@@ -328,10 +328,18 @@ export default {
     formatMyTime(e) {
       if (!e || isNaN(e)) return ''
       let num = Number(e)
-      if (num < 60) {
-        return `${num} ${this.$t('text38')}`
+      // 计算分钟、小时和天数
+      let minutes = Math.floor(num / 60);
+      let hours = Math.floor(minutes / 60);
+      let days = Math.floor(hours / 24);
+      if (days > 0) {
+        return `${days} ${this.$t('text115')}`
+      } else if (hours > 0) {
+        return `${hours} ${this.$t('text114')}`
+      } else if (minutes > 0) {
+        return `${minutes} ${this.$t('text113')}`
       } else {
-        return `${parseInt(num / 60)} ${this.$t('text113')}`
+        return `${num} ${this.$t('text38')}`
       }
     },
     submitOther() {

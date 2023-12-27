@@ -113,6 +113,8 @@ export default {
     text111:"Back",
     text112:"submit",
     text113:"minute",
+    text114:"hour",
+    text115:"day",
 
     text200:"Deposit coins",
     text201:"Currency address",

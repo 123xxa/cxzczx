@@ -112,6 +112,8 @@ export default {
     "text111": "Retour",
     "text112": "Soumettre",
     "text113": "minute",
+    "text114": "heure",
+    "text115": "jour",
     "text200": "Pièces de dépôt",
     "text201": "Adresse monétaire",
     "text202": "Adresse de la copie",

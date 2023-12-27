@@ -112,6 +112,8 @@ export default {
     "text111": "Quay lại",
     "text112": "Giới thiệu",
     "text113": "phút",
+    "text114": "giờ",
+    "text115": "ngày",
     "text200": "Tiền gửi",
     "text201": "Địa chỉ tiền tệ",
     "text202": "Địa chỉ bản sao",
