@@ -45,7 +45,7 @@ export default {
   methods: {
     ...mapActions(["setToken", "setUserInfo"]),
     async submit() {
-      if (!this.checked) return this.$toast(this.$t('text90'))
+      // if (!this.checked) return this.$toast(this.$t('text90')
       if (!this.account) return this.$toast(this.$t('text72'))
       if (!this.password) return this.$toast(this.$t('text73'))
       const res = await login({
