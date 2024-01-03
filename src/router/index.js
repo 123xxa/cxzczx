@@ -111,6 +111,11 @@ const routes = [
     path:"/identityVerification",
     name:"identityVerification",
     component:()=>import(/* webpackChunkName: "home" */ '@/views/verification/index.vue')
+  },
+  {
+    path:"/chat",
+    name:"chat",
+    component:()=>import(/* webpackChunkName: "home" */ '@/views/chat/index.vue')
   }
 ]
 

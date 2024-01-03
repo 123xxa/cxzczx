@@ -15,12 +15,16 @@
         <img :src="i" alt class="swipe-img" />
       </van-swipe-item>
     </van-swipe>
-    <!-- <div class="box nav-box">
-      <div class="nav-item" v-for="(i, k) in navList" :key="k">
-        <img :src="i.icon" class="nav-icon" alt />
-        <div>{{ i.name }}</div>
+    <div class="box nav-box">
+      <div class="nav-item"  @click="toOther('/identityVerification')">
+        <img src="@/assets/images/home/lmlm.png" class="nav-icon" alt />
+        <div>{{$t("text3") }}</div>
       </div>
-    </div> -->
+      <div class="nav-item"  @click="toOther('/chat')">
+        <img src="@/assets/images/home/kefu.png" class="nav-icon" alt />
+        <div>{{$t("text285") }}</div>
+      </div>
+    </div>
     <div class="box recharge-box" @click="toOther('/recharge')">
       <div style="width: 100%;">
         <div class="recharge-box-top">{{$t('text9')}}</div>
@@ -75,20 +79,6 @@ export default {
         require("@/assets/images/home/banner1.jpg"),
         require("@/assets/images/home/banner2.jpg"),
         require("@/assets/images/home/banner3.jpg")
-      ],
-      navList: [
-        {
-          name: this.$t("text2"),
-          icon: require("@/assets/images/home/ppmp.png")
-        },
-        // {
-        //   name: this.$t("text3"),
-        //   icon: require("@/assets/images/home/lmlm.png")
-        // },
-        {
-          name: this.$t("text4"),
-          icon: require("@/assets/images/home/lockMining.png")
-        }
       ],
       proportionList: []
     };

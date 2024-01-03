@@ -54,3 +54,8 @@ export function putCertification(data) {
     data: data
   })
 }
+
+
+export const history = (data) => {
+  return request({ method: "get", url: "/app/socket/history",params:data});
+};
