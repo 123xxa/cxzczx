@@ -9,8 +9,10 @@ import i18n from "./i18n/index"
 Vue.config.productionTip = false
 import empty from "@/components/empty/index.vue"
 Vue.component("empty", empty)
-import { Toast } from 'vant';
+import { Toast ,Dialog } from 'vant';
 Vue.use(Toast);
+Vue.use(Dialog);
+
 new Vue({
   router,
   store,

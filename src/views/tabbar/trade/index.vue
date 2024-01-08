@@ -1,6 +1,6 @@
 <template>
  <div class="content">
-    <div class="home-title">BTC/USDT</div>
+    <div class="home-title" @click="listShow = true">{{ proportionList.length>0?proportionList[numOneIndex].symbol:'' }}/USDT</div>
     <van-row>
       <van-col span="13">
         <div class="left">
@@ -20,14 +20,14 @@
           </div>
           <div class="left-price" v-if="type === 0">
             <div class="left-price-title">{{ $t('text19') }}</div>
-            <van-field class="input"  v-model="value" label="" :placeholder="$t('text31')" />
+            <van-field class="input"  v-model="value1" label="" :placeholder="$t('text31')" />
           </div>
           <div class="left-number">
             <div class="left-number-title">
               {{ $t('text20') }}
               <span class="fee">{{ $t('text21') }}:0.1%</span>
             </div>
-            <van-field class="input"  v-model="value" label="" :placeholder="$t('text22')" />
+            <van-field class="input"  v-model="value2" label="" :placeholder="$t('text22')" />
           </div>
           <div class="left-list">
             <div class="left-list-item">25%</div>
@@ -58,18 +58,18 @@
           </div>
           <div class="right-list">
             <div class="right-list-item">
-              <div class="right-list-item-content" v-for="(i, k) in 5" :key="k">
-                <div>41993.2</div>
-                <div class="right-list-item-content-r">2.725531</div>
-                <div :style="{ width: k * 10 + '%' }" class="right-list-item-content-bg1"></div>
+              <div class="right-list-item-content" v-for="(i, k) in buyList" :key="k">
+                <div>{{ i.price }}</div>
+                <div class="right-list-item-content-r">{{ i.number }}</div>
+                <div :style="{ width: i.proportion + '%' }" class="right-list-item-content-bg1"></div>
               </div>
             </div>
-            <div class="right-list-title">1312321.32</div>
+            <div class="right-list-title">{{ proportionList.length>0?proportionList[numOneIndex].price:'' }}</div>
             <div class="right-list-item">
-              <div class="right-list-item-content" style="color: #7286A5;" v-for="(i, k) in 5" :key="k">
-                <div>41993.2</div>
-                <div class="right-list-item-content-r">2.725531</div>
-                <div :style="{ width: k * 10 + '%' }" class="right-list-item-content-bg2"></div>
+              <div class="right-list-item-content" style="color: #7286A5;" v-for="(i, k) in sellList" :key="k">
+                <div>{{ i.price }}</div>
+                <div class="right-list-item-content-r">{{ i.number }}</div>
+                <div :style="{ width: i.proportion + '%' }" class="right-list-item-content-bg2"></div>
               </div>
             </div>
           </div>
@@ -89,24 +89,122 @@
     <empty />
     <van-action-sheet v-model="show" :actions="actions" :cancel-text="$t('text31')" close-on-click-action
       @select="onSelect" @cancel="onCancel" />
+      <list :show.sync="listShow" :list="proportionList" :index="numOneIndex" @changeIndex="changeIndex" />
   </div>
 </template>
 
 <script>
+import list from "../lever/list.vue";
+import { getLastPrice } from "@/api/home.js";
+import {mapGetters} from "vuex"
 export default {
   data() {
     return {
+      listShow:false,
       show: false,
       type: 0,
       priceType: 0,
-      value:'',
+      numOneIndex:0,
+      value1:'',
+      value2:'',
+      buyList:[],
+      sellList:[],
+      timer:null,
       actions: [
         { name: this.$t("text17"), value: 0 },
         { name: this.$t("text18"), value: 1 }
-      ]
+      ],
+      proportionList:[]
     };
   },
+  components:{list},
+  created(){
+    this.getList()
+  },
+  computed: {
+    ...mapGetters(['coinList', 'coinMainList', 'token']),
+  },
+  watch: {
+    coinMainList: {
+      handler(newVal, oldVal) {
+        let arr = newVal || []
+        if (this.proportionList && this.proportionList.length > 0 && arr && arr.length > 0 && JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
+          arr.map(item => {
+            let index = this.proportionList.findIndex(o => o.cryptoId == item.cryptoId)
+            if (index !== -1) {
+              this.proportionList[index].volumeChange24h = item.volumeChange24h
+              this.proportionList[index].price = item.price
+              this.proportionList[index].percentChange24h = item.percentChange24h
+            }
+            return item
+          })
+        }
+        this.$forceUpdate()
+      },
+      immediate: true,
+      deep: true
+    }
+  },
+  beforeDestroy(){
+    if(this.timer) clearInterval(this.timer)
+  },
   methods:{
+    countPriceLIst(price){
+      const arr = []
+      for(let i=0; i < 5; i++){
+          const obj = {
+            price: ((Math.random() * 1) + price ).toFixed(1),
+            number: ((Math.random() * 10) + 1 ).toFixed(5),
+            proportion:Math.floor(Math.random() * 100) + 1
+          }
+          arr.push(obj)
+        }
+      return arr
+    },
+    changeIndex(index) {
+      this.numOneIndex = index
+      this.getList()
+    },
+    async getList() {
+      const res = await getLastPrice()
+      if (res.code == 200) {
+        this.proportionList = res.data || []
+        if(this.timer) clearInterval(this.timer)
+        this.timer = setInterval(()=>{
+          this.buyList = this.countPriceLIst(Number(this.proportionList[this.numOneIndex].price))
+          this.sellList = this.countPriceLIst(Number(this.proportionList[this.numOneIndex].price))
+        },1000)
+      }
+    },
+    getLogo(e) {
+      let index = this.coinList.findIndex(o => {
+        return String(o.label).toLocaleLowerCase() === String(e).toLocaleLowerCase()
+      })
+      if (index !== -1) return this.coinList[index].logo
+      return this.coinList[0].logo
+    },
+    getPercent(e) {
+      if (!(e && String(e).length > 0)) return '0'
+      let n = String(e)
+      let list = n.split('')
+      let index = list.findIndex(o => o === '.')
+      if (index !== -1) {
+        let b = list.slice(0, index)
+        let a = list.slice(index + 1, list.length)
+        if (a.length > 2) {
+          if (Number(a[0]) === 0 && Number(a[1]) === 0) {
+            let nIn = a.findIndex(o => Number(o) !== 0)
+            if (nIn !== -1) {
+              let last = nIn + 2
+              return `${b.join('')}.${a.slice(0, last > a.length ? a.length : last).join('')}`
+            }
+          } else {
+            return `${b.join('')}.${a.slice(0, 2).join('')}`
+          }
+        }
+      }
+      return `${n}`
+    },
     onCancel(){
         this.show = false
     },

@@ -56,7 +56,6 @@ export default {
     this.history();
     const that = this;
     this.$socket.onmessage = function(event) {
-      console.log("接收到来自服务器的消息：", event, new Date().getTime());
       if (event.data) {
         const data = JSON.parse(event.data);
         if (data.type === "CHAT") {

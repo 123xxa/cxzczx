@@ -192,12 +192,9 @@ export default new Vuex.Store({
     setToken({commit}, data) {
       commit("SET_TOKEN", data);
     },
-    setUserInfo({commit}, data) {
-      getInfo().then(res => {
-        // console.log(res)
-        commit("SET_USERINFO", res.data);
-      })
-      // commit("SET_USERINFO", data);
+    async setUserInfo({commit}, data) {
+      const res =  await getInfo()
+      commit("SET_USERINFO", res.data);
     }
   },
   modules: {
