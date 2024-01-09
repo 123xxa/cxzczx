@@ -9,7 +9,7 @@
       </template>
     </van-nav-bar>
     <div class="main-box">
-      <div class="list-item" v-for="item in list" :key="item.label" @click="$router.push('/withdrawal')">
+      <div class="list-item" v-for="item in list" :key="item.label" @click="$router.push('/withdrawal?label='+item.label)">
         <div class="left-img">
           <img :src="item.logo" alt="" class="img">
         </div>
@@ -28,6 +28,10 @@ export default {
         {
           logo: require('@/assets/images/withdrawCoins/1.png'),
           label: 'USDT'
+        },
+        {
+          logo: require('@/assets/images/withdrawCoins/4.png'),
+          label: 'ETH'
         }
       ]
     };

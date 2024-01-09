@@ -75,10 +75,11 @@ export default {
           title: "USDT-ERC20",
           chainType: 2
         },
-        // {
-        //   icon: require("@/assets/images/recharge/4.png"),
-        //   title: "ETH-ERC20"
-        // },
+        {
+          icon: require("@/assets/images/recharge/4.png"),
+          title: "ETH-ERC20",
+          chainType: 2
+        },
         // {
         //   icon: require("@/assets/images/recharge/5.png"),
         //   title: "USDC-ERC20"

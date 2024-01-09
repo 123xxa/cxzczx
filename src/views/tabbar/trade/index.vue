@@ -15,10 +15,10 @@
             <img @click="show = true" src="@/assets/images/trade/down-arrow.png" style="width: 20px; height: 20px"
               alt="" />
           </div>
-          <div class="left-tips" v-if="type === 1">
+          <div class="left-tips" v-if="priceType === 1">
             <div>{{ $t('text33') }}</div>
           </div>
-          <div class="left-price" v-if="type === 0">
+          <div class="left-price" v-if="priceType === 0">
             <div class="left-price-title">{{ $t('text19') }}</div>
             <van-field class="input"  v-model="value1" label="" :placeholder="$t('text31')" />
           </div>
@@ -163,12 +163,14 @@ export default {
     },
     changeIndex(index) {
       this.numOneIndex = index
+      this.value1 = this.proportionList[this.numOneIndex].price
       this.getList()
     },
     async getList() {
       const res = await getLastPrice()
       if (res.code == 200) {
         this.proportionList = res.data || []
+      this.value1 = this.proportionList[this.numOneIndex].price
         if(this.timer) clearInterval(this.timer)
         this.timer = setInterval(()=>{
           this.buyList = this.countPriceLIst(Number(this.proportionList[this.numOneIndex].price))

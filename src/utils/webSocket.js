@@ -5,7 +5,6 @@ import i18n from '@/i18n/index'
 import router from '@/router'
 import Vue from "vue"
 // 随机数
-let normalId = store.state.userInfo && store.state.userInfo.id ? store.state.userInfo.id : new Date().getTime()
 // 获取ip + 端口 
 var wsUrl = `${config.baseUrl.replace('https', 'wss').replace('http', 'ws')}/websocket`;
 // 避免重复连接
@@ -33,6 +32,7 @@ function createWebSocket(info) {
 
 function init() {
     ws.onclose = function (e) {
+        console.log('关闭')
         ws = null
         Vue.prototype.$socket = null
         reconnect();
@@ -41,6 +41,7 @@ function init() {
         reconnect();
     };
     ws.onopen = function (e) {
+        let normalId = store.state.userInfo && store.state.userInfo.nickname ? store.state.userInfo.nickname : new Date().getTime()
         let obj = {
             type: 'JOIN',
             content: '',
@@ -72,6 +73,10 @@ function init() {
             }
         }
     }
+}
+
+export const  closeSocketConnection = ()=>{
+    ws.close();
 }
 
 function reconnect() {

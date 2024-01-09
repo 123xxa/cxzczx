@@ -13,7 +13,8 @@
           <div v-else>KYC:Unsubmitted</div>
         </div>
         <!-- <div class="top-box-r" v-if="token" @click="submit()">{{ $t('text50') }}</div>
-        <div class="top-box-r" v-else @click="$router.push('/login')">{{ $t('text83') }}</div> -->
+         -->
+         <div class="top-box-r" v-else @click="$router.push('/login')">{{ $t('text83') }}</div>
       </div>
       
       <div class="top-info">
@@ -82,6 +83,9 @@
             <div class="item-left">{{ $t('text65') }}</div>
             <van-switch v-model="switchChecked" size="20"  @change="changeMode" />
         </div> -->
+    </div>
+    <div class="logout" v-if="token">
+        <span  @click="submit()" >{{ $t('text50') }}</span>
     </div>
     <div style="height: 40px;"></div>
   </div>
@@ -174,6 +178,12 @@ export default {
     color: #333;
     border-radius: 5px;
   }
+}
+.logout{
+    text-align: center;
+    margin-top: 40px;
+    color: #FF000070;
+    font-size: 14px;
 }
 .top-info{
     margin: 0 10px 0;

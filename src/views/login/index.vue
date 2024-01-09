@@ -33,6 +33,7 @@
 import setLang from "@/components/setLang";
 import { login } from "@/api/login.js";
 import { mapActions } from "vuex";
+import { closeSocketConnection} from "@/utils/webSocket.js"
 export default {
   components: { setLang },
   data() {
@@ -55,7 +56,17 @@ export default {
       if (res.code == 200) {
         this.setToken(res.data.token || '')
         this.setUserInfo(res.data.walletVo || {})
-        this.$router.push('/home')
+        closeSocketConnection()
+        this.$toast.loading({
+        message: "Loading...",
+        forbidClick: true,
+        loadingType: "spinner",
+        duration: 0
+      });
+        setTimeout(()=>{
+          this.$toast.clear();
+          this.$router.push('/home')
+        },1000)
       }
     }
   }

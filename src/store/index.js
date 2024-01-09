@@ -194,7 +194,7 @@ export default new Vuex.Store({
     },
     async setUserInfo({commit}, data) {
       const res =  await getInfo()
-      commit("SET_USERINFO", res.data);
+      if(res.code == 200 )commit("SET_USERINFO",res.data);
     }
   },
   modules: {

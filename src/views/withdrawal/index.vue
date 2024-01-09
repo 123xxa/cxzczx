@@ -10,7 +10,8 @@
     </van-nav-bar>
     <div class="middle-part">
       <div class="part-box">
-        <div class="m-title">{{ `${list[listIndex].label} ${$t('text228')}` }}</div>
+        <!-- <div class="m-title">{{ `${list[listIndex].label} ${$t('text228')}` }}</div> -->
+        <div class="m-title">{{ `${$route.query.label || '-'} ${$t('text228')}` }}</div>
         <div class="m-tip">{{ $t('text223') }} {{ userInfo && userInfo.usdt || 0 }} {{ list[listIndex].label }}</div>
         <div class="chain-type">
           <div class="chain-title">{{ $t('text231') }}</div>

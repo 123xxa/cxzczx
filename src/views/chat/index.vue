@@ -16,7 +16,7 @@
         :key="k"
         :id="'id'+i.timestamp"
       >
-        <pre :class="['message',i.receiver=='system'?'bg':'']" v-html="i.content"></pre>
+        <pre :class="['message',i.receiver=='system'?'bg':'']" style="color: #333;" v-html="i.content"></pre>
       </div>
     </div>
     <div class="input" id="input">
