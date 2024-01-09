@@ -43,11 +43,20 @@ export function getKline(data) {
   })
 }
 
-// 获取k线图数据
+// 
 export function getKlines(data) {
   return request({
     url: '/app/cryptoData/klines',
     method: 'get',
     params: data
+  })
+}
+
+
+// 
+export function currencyConversion(data) {
+  return request({
+    url: '/app/wallet/currencyConversion',
+    method: 'put'
   })
 }

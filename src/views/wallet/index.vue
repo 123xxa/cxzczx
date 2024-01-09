@@ -19,18 +19,25 @@
                     <img src="@/assets/images/mine/f-b.png" alt="" class="f-img" v-else>
                 </div>
             </div>
-            <div class="money">{{ isView ? (Number(amount) + Number(reviewAmount)) : '****' }}</div>
+            <div class="money">{{ isView ? usdtTotal : '****' }}</div>
+            <div class="title-box" style="margin-top: 10PX;">
+                <div class="m-tip">
+                    （ETH）
+                </div>
+            </div>
+            <div class="money">{{ isView ? ethTotal : '****' }}</div>
         </div>
-        <div class="bottom-box" @click="$router.push({ path: '/flow', query: {amount: amount, reviewAmount: reviewAmount} })">
+        <div class="bottom-box" v-for="(i,k) in list" :key="k" 
+        @click="$router.push({ path: '/flow', query: {amount: i.amount, reviewAmount: i.reviewAmount,refType:i.tokenType} })">
             <div class="inside-box">
                 <div class="in-top-box">
-                    <div class="symbol">USDT</div>
+                    <div class="symbol">{{ i.tokenType==2?'USDT':'ETH' }}</div>
                     <van-icon name="arrow" color="#9ca3af" size="16" />
                 </div>
                 <div class="in-bottom-box">
                     <div class="b-item">
                         <div class="b-label">{{ $t('text223') }}</div>
-                        <div class="b-value">{{ isView ? amount : '****' }}</div>
+                        <div class="b-value">{{ isView ? i.amount : '****' }}</div>
                     </div>
                     <!-- <div class="b-item">
                         <div class="b-label">{{ $t('text250') }}（USDT）</div>
@@ -38,7 +45,7 @@
                     </div> -->
                     <div class="b-item">
                         <div class="b-label">{{ $t('text249') }}</div>
-                        <div class="b-value">{{ isView ? reviewAmount : '****' }}</div>
+                        <div class="b-value">{{ isView ? i.reviewAmount : '****' }}</div>
                     </div>
                 </div>
             </div>
@@ -53,7 +60,10 @@ export default {
         return {
             isView: true,
             amount: 0,
-            reviewAmount: 0
+            reviewAmount: 0,
+            list:[],
+            usdtTotal:0,
+            ethTotal:0
         };
     },
     created() {
@@ -69,8 +79,19 @@ export default {
         async getInfo() {
             const res = await getUserWallet()
             if (res.code == 200) {
-                this.amount = res.data.amount || 0
-                this.reviewAmount = res.data.reviewAmount || 0
+                this.usdtTotal = 0
+                this.ethTotal = 0
+                this.list = res.data.map(i=>{
+                    i.amount = i.amount || 0
+                    i.reviewAmount = i.reviewAmount || 0
+                    if(i.tokenType == 2){
+                        this.usdtTotal += Number(i.amount) + Number(i.reviewAmount) 
+                    }
+                    if(i.tokenType == 3){
+                        this.ethTotal += Number(i.amount) + Number(i.reviewAmount) 
+                    }
+                    return i
+                })
             }
         }
     }
@@ -130,7 +151,7 @@ export default {
     }
     .bottom-box {
         width: 100%;
-        padding: 22px 11px 55px;
+        padding: 22px 11px 0;
         box-sizing: border-box;
         .inside-box {
             width: 100%;

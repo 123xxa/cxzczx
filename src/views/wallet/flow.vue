@@ -34,13 +34,14 @@
             </div>
             <div class="list-box" v-if="list && list.length !== 0">
                 <div class="list-item" v-for="item in list" :key="item.id">
-                    <div class="item-item">{{ item.usdt }}</div>
+                    <div class="item-item">{{ refType==2? item.usdt : item.eth }}</div>
                     <div class="item-item">
                         {{
                             {
                                 1: $t('text253'),
                                 50: $t('text254'),
                                 60: $t('text255'),
+                                64: $t('text286')
                             }[item.module]
                         }}
                     </div>
@@ -67,7 +68,8 @@ export default {
             list: [],
             total: 0,
             pageSize: 20,
-            pageNum: 1
+            pageNum: 1,
+            refType:undefined
         };
     },
     created() {
@@ -76,6 +78,9 @@ export default {
         }
         if (this.$route.query.reviewAmount) {
             this.reviewAmount = this.$route.query.reviewAmount || 0
+        }
+        if (this.$route.query.refType) {
+            this.refType = this.$route.query.refType 
         }
         this.getList();
     },
@@ -96,7 +101,8 @@ export default {
             this.loading = true
             getBalanceLog({
                 pageSize: this.pageSize,
-                pageNum: this.pageNum
+                pageNum: this.pageNum,
+                refType:this.refType
             }).then(res => {
                 this.total = res.total
                 let arr = res.rows || []

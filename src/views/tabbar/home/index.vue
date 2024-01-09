@@ -20,6 +20,10 @@
         <img src="@/assets/images/home/lmlm.png" class="nav-icon" alt />
         <div>{{$t("text3") }}</div>
       </div>
+      <div class="nav-item"  @click="toOther('/staking')">
+        <img src="@/assets/images/home/lockMining.png" class="nav-icon" alt />
+        <div>{{$t("text4") }}</div>
+      </div>
       <div class="nav-item"  @click="toOther('/chat')">
         <img src="@/assets/images/home/kefu.png" class="nav-icon" alt />
         <div>{{$t("text285") }}</div>

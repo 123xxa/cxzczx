@@ -199,6 +199,8 @@ export default {
     "text282": "Bitte wählen oder geben Sie die Anzahl der Hände ein",
     "text283": "Bitte geben Sie den Provisionspreis ein",
     "text284": "Bitte kontaktieren Sie den Kundenservice",
+    text286:'Umwandlung',
+    text287:'ETH in USDT konvertieren',
     text285:'Service',
     userTitle: "QCM Datenschutzerklärung",
     userAgreement:`

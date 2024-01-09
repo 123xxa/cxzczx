@@ -116,6 +116,11 @@ const routes = [
     path:"/chat",
     name:"chat",
     component:()=>import(/* webpackChunkName: "home" */ '@/views/chat/index.vue')
+  },
+  {
+    path:"/staking",
+    name:"staking",
+    component:()=>import(/* webpackChunkName: "home" */ '@/views/staking/index.vue')
   }
 ]
 

@@ -78,7 +78,7 @@ export default {
         {
           icon: require("@/assets/images/recharge/4.png"),
           title: "ETH-ERC20",
-          chainType: 2
+          chainType: 3
         },
         // {
         //   icon: require("@/assets/images/recharge/5.png"),

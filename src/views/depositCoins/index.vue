@@ -38,7 +38,7 @@ import { appRecharge, getRechargeAddress, imageUploader } from '@/api/user.js'
 export default {
   data() {
     return {
-      // 1 TRC20 2 ERC20
+      // 1 TRC20 2 ERC20  3 ETH
       chainType: 1,
       address: '',
       account: '',
@@ -143,8 +143,8 @@ export default {
         address: this.account,
         amount: this.amount,
         certificateImage: this.imgPath,
-        chinType: this.chainType,
-        tokenType: 2
+        chinType: this.chainType == 3 ? 1 : this.chainType,
+        tokenType: this.chainType == 1 || this.chainType == 2 ? 2 :3
       })
       if (res.code == 200) {
         this.$toast(this.$t('text240'))
